@@ -49,29 +49,29 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     //set up projects
-    {
-      name: 'adminSetup',
-      testMatch: /.*\Admin.setup\.ts/,
-      retries: 1
-    },
+    // {
+    //   name: 'adminSetup',
+    //   testMatch: /.*\Admin.setup\.ts/,
+    //   retries: 1
+    // },
 
     // Main project
-    {
-      name: 'Playground UI Test on Chrome',
-
-      use: {
-        ...devices['Desktop Chrome'],
-
-        //use prepared auth state of Admin as this is used by all TCs unless specified explicitly in describe block
-        storageState: "playwright/.auth/admin.json",
-      },
-      dependencies: ['adminSetup'],
-      fullyParallel: true,
-    },
     // {
-    //   name: 'chromium',
-    //   use: { ...devices['Desktop Chrome'] },
+    //   name: 'Playground UI Test on Chrome',
+
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+
+    //     //use prepared auth state of Admin as this is used by all TCs unless specified explicitly in describe block
+    //     storageState: "playwright/.auth/admin.json",
+    //   },
+    //   dependencies: ['adminSetup'],
+    //   fullyParallel: true,
     // },
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
 
     // {
     //   name: 'firefox',
