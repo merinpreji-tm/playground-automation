@@ -1,0 +1,119 @@
+{
+    "titles": {
+        "homePage": "PlayGround",
+        "loginPage": "Login to your account",
+        "componentsPage": "Explore Components",
+        "cart": "Cart",
+        "payment": "Payment Gateway",
+        "contact": "Contact",
+        "about": "About",
+        "wishlist": "Wishlist",
+        "userProfile": "User Profile",
+        "editProfile": "Edit Profile",
+        "myOrders": "My Orders",
+        "signUp": "Create an Account"
+    },
+    "navigationMenu": {
+        "shop": "Shop",
+        "components": "Components",
+        "about": "About",
+        "contact": "Contact"
+    },
+    "sideMenu": {
+        "shopByCategory": "Shop by Category"
+    },
+    "texts": {
+        "profile": "Profile",
+        "popWindowContent": "This is the content of the Pop Window. You can put any content here.",
+        "logout": "Log Out",
+        "myOrders": "My Orders",
+        "signUp": "Sign Up"
+    },
+    "messages": {
+        "success": "Successful!",
+        "orderSucces": "Your order has been placed successfully!",
+        "wishlistSuccess": "Product added to wish List",
+        "wishlistItemExists": "Product already in wishlist",
+        "logoutAlert": "Are you sure you want to log out?",
+        "logoutSuccess": "Logout Successful!"
+    },
+    "filters": {
+        "brand": {
+            "sectionTitle": "Brand",
+            "brandToSelect": "Asus"
+        },
+        "category": {
+            "sectionTitle": "Category",
+            "brandToSelect": {
+                "mobiles": "Mobiles",
+                "laptops": "Laptops"
+            }
+        }
+    },
+    "buttons": {
+        "login": "Login",
+        "openPopWindow": "Open Pop Window",
+        "close": "Close",
+        "addToCart": "Add to Cart",
+        "resetCart": "Reset cart",
+        "checkout":"Proceed to Checkout",
+        "post": "Post",
+        "placeOrder": "Place Order",
+        "continueShopping": "Continue Shopping",
+        "addToWishlist": "Add to Wishlist",
+        "resetWishlist": "Reset Wishlist",
+        "edit": "Edit",
+        "save": "Save",
+        "next": "Next"
+    },
+    "inputFieldIds": {
+        "email": "email",
+        "password": "password"
+    },
+    "cardTitles": {
+        "popWindow": "Pop Window Component"
+    },
+    "searchTerm": {
+        "laptop": "laptop"
+    },
+    "cart": {
+        "countToIncrease": 2,
+        "countToDecrease": 1
+    },
+    "contact": {
+        "name": "Merin",
+        "email": "merin.reji@testingmavens.com",
+        "messages": "Okay",
+        "address": "123A, ABC Street",
+        "phone": "9876567897",
+        "bio": "Lorem Ipsum"
+    },
+    "signUp": {
+        "fullName": "Merin",
+        "email": "merin.reji@testingmavens.com",
+        "password": ""
+    },
+    "gender": {
+        "male": "Male",
+        "female": "Female",
+        "other": "Other"
+    },
+    "country": {
+        "india": "India",
+        "us": "US"
+    },
+    "products": [
+        {"Dell XPS 13": "$1299"},
+        {"MacBook Pro 16": "$2399"},
+        {"HP Spectre x360": "$1499.99"},
+        {"Lenovo ThinkPad X1 Carbon": "$1599"},
+        {"Asus ZenBook 14": "$1099"},
+        {"Microsoft Surface Laptop 4": "$1299"},
+        {"Razer Blade 15": "$1999.99"},
+        {"Acer Predator Helios 300": "$1299"},
+        {"Gigabyte Aero 15 OLED": "$2399"},
+        {"MSI GS66 Stealth": "$1799"},
+        {"iPhone 13 Pro": "$999"},
+        {"Samsung Galaxy S22 Ultra": "$1199.99"}
+    ]
+}

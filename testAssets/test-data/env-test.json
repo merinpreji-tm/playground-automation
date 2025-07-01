@@ -1,0 +1,17 @@
+{
+    "baseUrl": "https://www.playground.testingmavens.tools/",
+    "userName": "merin.reji@testingmavens.com",
+    "password": "letsPlayground#25",
+    "waitFor": {
+        "MIN": 500,
+        "LOW": 5000,
+        "HIGH": 15000,
+        "VERYHIGH": 45000,
+        "MAX": 90000,
+        "APITIMEOUT": 30000
+    },
+    "networkCalls": {
+        "notificationsApi": "/playground-api/notifications?",
+        "allRegionIdApi": "/playground-api/notifications?"
+    }
+}
