@@ -1,0 +1,73 @@
+import { Locator, Page, test, expect } from "@playwright/test";
+import { Common } from "./common";
+
+class HomePage extends Common {
+    profileIcon: Locator;
+    // searchBar: Locator;
+    // product: Locator;
+    // productTitle: Locator;
+    // shopNowButton: (value: any) => any;
+    // newArrivalProduct: Locator;
+    // newArrivalProductTitle: Locator;
+    // cartItemsCount: Locator;
+    // cartLocator: Locator;
+    // wishlistItemsCount: Locator;
+    // wishlistIcon: Locator;
+
+    constructor(public page: Page){
+        super(page);
+        this.profileIcon = this.page.locator(`(//div[@class="relative"])[2]`);
+        // this.searchBar = this.page.locator(`//input[@placeholder="Search your products here"]`);
+        // this.product = this.page.locator(`(//div[contains(@class,"gap-8 p-10")])[1]`);
+        // this.productTitle = this.page.locator(`(//p[contains(@class,"font-semibold text-lg")])[1]`);
+        // this.shopNowButton = (category) => this.page.locator(`//h2[text()="${category}"]/..//button[text()="Shop Now"]`);
+        // this.newArrivalProduct = this.page.locator(`//div[text()="New Arrivals"]/..//div[@data-index="0"]`);
+        // this.newArrivalProductTitle = this.page.locator(`//div[text()="New Arrivals"]/..//div[@data-index="0"]//h2`);
+        // this.cartItemsCount = this.page.locator(`//a[@href="/cart"]//span`);
+        // this.wishlistItemsCount = this.page.locator(`//a[@href="/wishlist"]//span`);
+        // this.wishlistIcon = this.page.locator(`//a[@href="/wishlist"]`);
+    }
+
+    /**
+     * Method to login to playground by valid email and password
+     * @param {string} email
+     * @param {string} password
+     * @param {string} text
+    */
+    async logIn(email: string, password: string, text: string) {
+        await test.step("Log In to the Playground application", async () => {
+            await this.actions.clickOn(this.profileIcon, "Profile Icon");
+            await this.actions.clickOn(this.liText(text), `${text}`);
+            await this.actions.waitForPageToLoad();
+            await this.actions.typeText(this.inputField("email"), email, "Email Address field");
+            await this.actions.typeText(this.inputField("password"), password, "Password field");
+            await this.actions.clickButton(this.button(text), `${text}`);
+            console.log("Logged in successfully");
+            await this.actions.waitForElementToBeDisappear(this.ptagText("Login to your account"));
+        });
+    };
+
+    /**
+     * Method to launch and login to the application
+     * @param {string} url
+     * @param {string} email
+     * @param {string} password
+     * @param {string} text
+    */
+    async launchBrowserAndLoginToApp(url: any, email: any, password: any, text: string){
+        await test.step("Launch browser and login to the app", async () => {
+            await this.launchUrl(url);
+            await this.logIn(email, password, text);
+        });
+    }
+
+     /**
+      * Method to check whether profile shortcut is visible
+      * @param {string} text
+      */
+    async verifyProfileShortcutIsVisible(text: string){
+        await this.actions.waitForPageToLoad();
+        return await this.ptagText(text).isVisible();
+    }
+}
+export default HomePage;
