@@ -28,10 +28,24 @@ export class Common {
         this.textarea = this.page.locator(`//textarea`);
     }
 
+    /**
+     * Method to launch url
+     * @param {string} url
+    */
     async launchUrl(url: string) {
         await test.step("Launch the Playground website", async () => {
             await this.page.goto(url);
             await this.actions.waitForPageToLoad();
+        });
+    }
+
+    /**
+     * Method to click navigation menu
+     * @param {string} menu
+    */
+    async clickNavigationMenu(menu: string) {
+        await test.step(`Click on ${menu} in the navigation bar`, async () => {
+            await this.actions.clickOn(this.navigationMenu(menu), `Navigation menu '${menu}'`);
         });
     }
 }
