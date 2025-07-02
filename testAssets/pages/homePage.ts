@@ -29,22 +29,27 @@ class HomePage extends Common {
     }
 
     /**
+     * Method to click profile icon in home page
+    */
+    async clickProfileIcon() {
+        await this.actions.clickOn(this.profileIcon, "Profile Icon");
+    }
+
+    /**
      * Method to login to playground by valid email and password
      * @param {string} email
      * @param {string} password
      * @param {string} text
     */
     async logIn(email: string, password: string, text: string) {
-        await test.step("Log In to the Playground application", async () => {
-            await this.actions.clickOn(this.profileIcon, "Profile Icon");
-            await this.actions.clickOn(this.liText(text), `${text}`);
-            await this.actions.waitForPageToLoad();
-            await this.actions.typeText(this.inputField("email"), email, "Email Address field");
-            await this.actions.typeText(this.inputField("password"), password, "Password field");
-            await this.actions.clickButton(this.button(text), `${text}`);
-            console.log("Logged in successfully");
-            await this.actions.waitForElementToBeDisappear(this.ptagText("Login to your account"));
-        });
+        await this.clickProfileIcon();
+        await this.actions.clickOn(this.liText(text), `${text}`);
+        await this.actions.waitForPageToLoad();
+        await this.actions.typeText(this.inputField("email"), email, "Email Address field");
+        await this.actions.typeText(this.inputField("password"), password, "Password field");
+        await this.actions.clickButton(this.button(text), `${text}`);
+        console.log("Logged in successfully");
+        await this.actions.waitForElementToBeDisappear(this.ptagText("Login to your account"));
     };
 
     /**
@@ -55,10 +60,8 @@ class HomePage extends Common {
      * @param {string} text
     */
     async launchBrowserAndLoginToApp(url: any, email: any, password: any, text: string){
-        await test.step("Launch browser and login to the app", async () => {
-            await this.launchUrl(url);
-            await this.logIn(email, password, text);
-        });
+        await this.launchUrl(url);
+        await this.logIn(email, password, text);
     }
 
      /**
@@ -68,6 +71,16 @@ class HomePage extends Common {
     async verifyProfileShortcutIsVisible(text: string){
         await this.actions.waitForPageToLoad();
         return await this.ptagText(text).isVisible();
+    }
+
+    /**
+     * Method to select category under 'Shop by Category' in home page
+     * @param {string} sideMenu
+     * @param {string} category
+     */
+    async selectCategory(sideMenu: string, category: string){
+        await this.actions.clickOn(this.ptagText(sideMenu), `${sideMenu}`);
+        await this.actions.clickOn(this.liText(category), `${category}`);
     }
 }
 export default HomePage;

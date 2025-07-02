@@ -77,4 +77,12 @@ test.describe("Test the Playground web application", async () => {
     });
   });
 
+  test("TC03 - Verify  user is able to shop by category", async ({ homePage, shopPage }) => {
+    await test.step(`Click on  "Shop by Category" menu and select category ${playgroundData.filters.category.brandToSelect.mobiles}`, async () => {
+      await homePage.selectCategory(playgroundData.sideMenu.shopByCategory, playgroundData.filters.category.brandToSelect.mobiles);
+      const isShopVisible = await shopPage.verifyMenuIsVisible();
+      expect(isShopVisible, "Shop text should be displayed").toBe(true);
+    });
+  });
+
 });
