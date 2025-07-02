@@ -7,8 +7,8 @@ class HomePage extends Common {
     product: Locator;
     productTitle: Locator;
     shopNowButton: (value: any) => any;
-    // newArrivalProduct: Locator;
-    // newArrivalProductTitle: Locator;
+    newArrivalProduct: Locator;
+    newArrivalProductTitle: Locator;
     // cartItemsCount: Locator;
     // cartLocator: Locator;
     // wishlistItemsCount: Locator;
@@ -21,8 +21,8 @@ class HomePage extends Common {
         this.product = this.page.locator(`(//div[contains(@class,"gap-8 p-10")])[1]`);
         this.productTitle = this.page.locator(`(//p[contains(@class,"font-semibold text-lg")])[1]`);
         this.shopNowButton = (category) => this.page.locator(`//h2[text()="${category}"]/..//button[text()="Shop Now"]`);
-        // this.newArrivalProduct = this.page.locator(`//div[text()="New Arrivals"]/..//div[@data-index="0"]`);
-        // this.newArrivalProductTitle = this.page.locator(`//div[text()="New Arrivals"]/..//div[@data-index="0"]//h2`);
+        this.newArrivalProduct = this.page.locator(`//div[text()="New Arrivals"]/..//div[@data-index="0"]`);
+        this.newArrivalProductTitle = this.page.locator(`//div[text()="New Arrivals"]/..//div[@data-index="0"]//h2`);
         // this.cartItemsCount = this.page.locator(`//a[@href="/cart"]//span`);
         // this.wishlistItemsCount = this.page.locator(`//a[@href="/wishlist"]//span`);
         // this.wishlistIcon = this.page.locator(`//a[@href="/wishlist"]`);
@@ -44,6 +44,14 @@ class HomePage extends Common {
     }
 
     /**
+     * Method to click the first product under 'New Arrivals' section
+     * @param productTitle 
+     */
+    async clickNewArrivalProduct(productTitle: string) {
+        await this.actions.clickOn(this.newArrivalProduct, `First product under 'New Arrivals' section: ${productTitle}`);
+    }
+
+    /**
      * Method to type email and password
      * @param email 
      * @param password 
@@ -52,7 +60,6 @@ class HomePage extends Common {
         await this.actions.typeText(this.inputField("email"), email, "Email Address field");
         await this.actions.typeText(this.inputField("password"), password, "Password field");
     };
-
 
     /**
      * Method to login to playground by valid email and password

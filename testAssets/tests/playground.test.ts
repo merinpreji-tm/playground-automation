@@ -103,4 +103,17 @@ test.describe("Test the Playground web application", async () => {
       expect(isChecked, `'${playgroundData.filters.category.brandToSelect.laptops}' should be selected under 'Shop by ${playgroundData.filters.category.sectionTitle}' section`).toBe(true);
     });
   });
+
+  test("TC06 - Verify if the user is able to  select a product by clicking on the product", async ({ common, homePage, productDetailsPage }) => {
+    await test.step(`Select the first product under "New Arrivals"`, async () => {
+      newArrivalProductTitle = await common.getText(homePage.newArrivalProductTitle);
+      await homePage.clickNewArrivalProduct(newArrivalProductTitle);
+    });
+
+    await test.step("Verify that product page displays the selected product", async () => {
+      const productTitle = await common.getText(productDetailsPage.productTitle);
+      expect(newArrivalProductTitle, "Selected product title should be same as title displayed in product details page").toBe(productTitle);
+    });
+  });
+
 });
