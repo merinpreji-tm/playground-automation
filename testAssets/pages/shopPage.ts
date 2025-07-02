@@ -23,8 +23,22 @@ class ShopPage extends Common {
         this.productsDiv = this.page.locator(`//div[@class="w-full"]/parent::div[contains(@class,"grid")]`);
     }
 
+    /**
+     * Method to click a filter dropdown
+     * @param filter 
+     */
     async clickFilter(filter: string) {
         await this.actions.clickDropdown(this.filter(filter), `Shop by ${filter}`);
+    }
+
+    /**
+     * Method to click on a product
+     * @returns title of the product
+     */
+    async clickProduct() {
+        const title = await this.productTitle.nth(1).innerText();
+        await this.actions.clickOn(this.product.nth(1), `Product: ${title}`);
+        return title;
     }
 
     /**
