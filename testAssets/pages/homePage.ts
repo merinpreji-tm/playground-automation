@@ -1,5 +1,6 @@
 import { Locator, Page, test, expect } from "@playwright/test";
 import { Common } from "./common";
+import * as env from "../test-data/env-test.json";
 
 class HomePage extends Common {
     profileIcon: Locator;
@@ -9,10 +10,9 @@ class HomePage extends Common {
     shopNowButton: (value: any) => any;
     newArrivalProduct: Locator;
     newArrivalProductTitle: Locator;
-    // cartItemsCount: Locator;
-    // cartLocator: Locator;
-    // wishlistItemsCount: Locator;
-    // wishlistIcon: Locator;
+    cartItemsCount: Locator;
+    wishlistItemsCount: Locator;
+    wishlistIcon: Locator;
 
     constructor(public page: Page){
         super(page);
@@ -23,9 +23,9 @@ class HomePage extends Common {
         this.shopNowButton = (category) => this.page.locator(`//h2[text()="${category}"]/..//button[text()="Shop Now"]`);
         this.newArrivalProduct = this.page.locator(`//div[text()="New Arrivals"]/..//div[@data-index="0"]`);
         this.newArrivalProductTitle = this.page.locator(`//div[text()="New Arrivals"]/..//div[@data-index="0"]//h2`);
-        // this.cartItemsCount = this.page.locator(`//a[@href="/cart"]//span`);
-        // this.wishlistItemsCount = this.page.locator(`//a[@href="/wishlist"]//span`);
-        // this.wishlistIcon = this.page.locator(`//a[@href="/wishlist"]`);
+        this.cartItemsCount = this.page.locator(`//a[@href="/cart"]//span`);
+        this.wishlistItemsCount = this.page.locator(`//a[@href="/wishlist"]//span`);
+        this.wishlistIcon = this.page.locator(`//a[@href="/wishlist"]`);
     }
 
     /**
@@ -118,6 +118,48 @@ class HomePage extends Common {
         const productTitle = await this.getText(this.productTitle);
         await this.actions.clickOn(this.product, "First product");
         return productTitle;
+    }
+
+
+    /**
+     * Method to check whether cart/wishlist count has increased
+     * @param previousCount 
+     * @param locator 
+     * @returns true if count has increased
+     */
+    async hasCountIncreased(previousCount: number, locator: Locator) {
+        try {
+            await expect.poll(
+                async () => await this.getCount(locator),
+                {
+                    timeout: env.waitFor.HIGH,
+                    message: "Waiting for count to increase"
+                }
+            ).toBeGreaterThan(previousCount);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    /**
+     * Method to check whether cart/wishlist count has become zero
+     * @param locator 
+     * @returns true if count has become zero
+     */
+    async hasCountBecomeZero(locator: Locator) {
+        try {
+            await expect.poll(
+                async () => await this.getCount(locator),
+                {
+                    timeout: env.waitFor.HIGH,
+                    message: "Waiting for count to become zero",
+                }
+            ).toBe(0);
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 }
 export default HomePage;

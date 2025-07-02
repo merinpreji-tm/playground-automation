@@ -64,4 +64,14 @@ export class Common {
         await this.actions.waitForPageToLoad();
         return await locator.innerText();
     }
+
+    /**
+     * Method to get number inside a locator
+     * @param locator 
+     * @returns text inside the locator as integer
+     */
+    async getCount(locator: Locator){
+        const count = await locator.innerText();
+        return parseInt(count.trim());
+    }
 }

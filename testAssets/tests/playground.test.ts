@@ -116,4 +116,29 @@ test.describe("Test the Playground web application", async () => {
     });
   });
 
+  test("TC07 - Verify if the user is able to add the product to the cart", async ({ common, homePage, productDetailsPage }) => {
+    await test.step(`Select the first product under "New Arrivals"`, async () => {
+      cartItemsCount = await homePage.getCount(homePage.cartItemsCount);
+      newArrivalProductTitle = await common.getText(homePage.newArrivalProductTitle);
+      await homePage.clickNewArrivalProduct(newArrivalProductTitle);
+    });
+
+    await test.step("Verify that product page displays the selected product", async () => {
+      const productTitle = await common.getText(productDetailsPage.productTitle);
+      expect(newArrivalProductTitle, "Selected product title should be same as title displayed in product details page").toBe(productTitle);
+    });
+
+    await test.step("Click on 'Add to Cart' button", async () => {
+      await common.clickButton(playgroundData.buttons.addToCart);
+      const cartItemCountIncreased = await homePage.hasCountIncreased(cartItemsCount, homePage.cartItemsCount);
+      expect(cartItemCountIncreased, "Number of items in the cart should be increased").toBe(true);
+    });
+
+    // Resetting the cart to remove added item in cart
+    await test.step("Click on 'Reset Cart' button", async () => {
+      await common.clickButton(playgroundData.buttons.resetCart);
+      const cartItemCount = await homePage.hasCountBecomeZero(homePage.cartItemsCount);
+      expect(cartItemCount, "Number of items in the cart should be zero").toBe(true);
+    });
+  });
 });
