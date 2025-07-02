@@ -3,9 +3,9 @@ import { Common } from "./common";
 
 class HomePage extends Common {
     profileIcon: Locator;
-    // searchBar: Locator;
-    // product: Locator;
-    // productTitle: Locator;
+    searchBar: Locator;
+    product: Locator;
+    productTitle: Locator;
     // shopNowButton: (value: any) => any;
     // newArrivalProduct: Locator;
     // newArrivalProductTitle: Locator;
@@ -17,9 +17,9 @@ class HomePage extends Common {
     constructor(public page: Page){
         super(page);
         this.profileIcon = this.page.locator(`(//div[@class="relative"])[2]`);
-        // this.searchBar = this.page.locator(`//input[@placeholder="Search your products here"]`);
-        // this.product = this.page.locator(`(//div[contains(@class,"gap-8 p-10")])[1]`);
-        // this.productTitle = this.page.locator(`(//p[contains(@class,"font-semibold text-lg")])[1]`);
+        this.searchBar = this.page.locator(`//input[@placeholder="Search your products here"]`);
+        this.product = this.page.locator(`(//div[contains(@class,"gap-8 p-10")])[1]`);
+        this.productTitle = this.page.locator(`(//p[contains(@class,"font-semibold text-lg")])[1]`);
         // this.shopNowButton = (category) => this.page.locator(`//h2[text()="${category}"]/..//button[text()="Shop Now"]`);
         // this.newArrivalProduct = this.page.locator(`//div[text()="New Arrivals"]/..//div[@data-index="0"]`);
         // this.newArrivalProductTitle = this.page.locator(`//div[text()="New Arrivals"]/..//div[@data-index="0"]//h2`);
@@ -35,6 +35,14 @@ class HomePage extends Common {
         await this.actions.clickOn(this.profileIcon, "Profile Icon");
     }
 
+    async enterEmailId(email: string) {
+        await this.actions.typeText(this.inputField("email"), email, "Email Address field");
+    };
+
+    async enterPassword(password: string) {
+        await this.actions.typeText(this.inputField("password"), password, "Password field");
+    };
+
     /**
      * Method to login to playground by valid email and password
      * @param {string} email
@@ -45,8 +53,8 @@ class HomePage extends Common {
         await this.clickProfileIcon();
         await this.actions.clickOn(this.liText(text), `${text}`);
         await this.actions.waitForPageToLoad();
-        await this.actions.typeText(this.inputField("email"), email, "Email Address field");
-        await this.actions.typeText(this.inputField("password"), password, "Password field");
+        await this.enterEmailId(email);
+        await this.enterPassword(password);
         await this.actions.clickButton(this.button(text), `${text}`);
         console.log("Logged in successfully");
         await this.actions.waitForElementToBeDisappear(this.ptagText("Login to your account"));
@@ -81,6 +89,18 @@ class HomePage extends Common {
     async selectCategory(sideMenu: string, category: string){
         await this.actions.clickOn(this.ptagText(sideMenu), `${sideMenu}`);
         await this.actions.clickOn(this.liText(category), `${category}`);
+    }
+
+    /**
+     * Method to search a product in the search bar
+     * @param searchTerm 
+     * @returns product title shown when
+     */
+    async searchProduct(searchTerm: string){
+        await this.actions.typeText(this.searchBar, searchTerm, "Search Bar");
+        const productTitle = await this.getText(this.productTitle);
+        await this.actions.clickOn(this.product, "First product");
+        return productTitle;
     }
 }
 export default HomePage;

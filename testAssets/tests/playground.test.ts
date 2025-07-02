@@ -85,4 +85,15 @@ test.describe("Test the Playground web application", async () => {
     });
   });
 
+  test("TC04 - Verify if the user is able to search the product using the search bar", async ({ common, homePage, productDetailsPage }) => {
+    await test.step(`Search for '${playgroundData.searchTerm.laptop}' in the search bar`, async () => {
+      searchedProductTitle = await homePage.searchProduct(playgroundData.searchTerm.laptop);
+    });
+
+    await test.step("Verify that product page displays the searched product", async () => {
+      const productTitle = await common.getText(productDetailsPage.productTitle);
+      expect(searchedProductTitle, "Searched product title should be same as title displayed in product details page").toBe(productTitle);
+    });
+  });
+
 });
