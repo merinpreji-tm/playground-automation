@@ -88,12 +88,14 @@ class CartPage extends Common {
         }
     }
 
-    async verfyCartItems(...expectedTexts: string[]) {
-        return await test.step(`Check if product titles contain all: ${expectedTexts.join(", ")}`, async () => {
-            const actualTitles = await this.productTitles.allInnerTexts();
-
-            return expectedTexts.every(expected => actualTitles.some(title => title.includes(expected)));
-        });
+    /**
+     * Method to check items added in cart
+     * @param expectedProducts 
+     * @returns 
+     */
+    async verifyCartItems(...expectedProducts: string[]) {
+        const actualTitles = await this.productTitles.allInnerTexts();
+        return expectedProducts.every(expected => actualTitles.some(title => title.includes(expected)));
     }
 }
 export default CartPage;

@@ -32,6 +32,16 @@ class ShopPage extends Common {
     }
 
     /**
+     * Method to click on a product
+     * @returns title of the product
+     */
+    async clickProduct() {
+        const title = await this.productTitle.nth(1).innerText();
+        await this.actions.clickOn(this.product.nth(1), `Product: ${title}`);
+        return title;
+    }
+
+    /**
      * Method to verify the selected menu is displayed
      * @returns true if selected menu text is visible
     */
