@@ -69,22 +69,23 @@ class CartPage extends Common {
         }
     }
 
+    /**
+     * Method to decrease quantity of a product
+     * @param count 
+     * @param productName 
+     */
     async decreaseItemCount(count: number, productName: string) {
-        await test.step(`Decrease item count by ${count}`, async () => {
-            const initialQuantity = await this.getProductQuantity(productName);
-
-            for (let i = 0; i < count; i++) {
-                await this.clickMinusButton(productName);
-
-                // Wait until quantity decreases
-                await expect.poll(async () => {
-                    return await this.getProductQuantity(productName);
-                }, {
-                    timeout: env.waitFor.HIGH,
-                    message: `Product quantity did not decrease after clicking '-'`
-                }).toBe(initialQuantity - i - 1);
-            }
-        });
+        const initialQuantity = await this.getProductQuantity(productName);
+        for (let i = 0; i < count; i++) {
+            await this.clickMinusButton(productName);
+            // Wait until quantity decreases
+            await expect.poll(async () => {
+                return await this.getProductQuantity(productName);
+            }, {
+                timeout: env.waitFor.HIGH,
+                message: `Product quantity did not decrease after clicking '-'`
+            }).toBe(initialQuantity - i - 1);
+        }
     }
 
     async verfyCartItems(...expectedTexts: string[]) {
