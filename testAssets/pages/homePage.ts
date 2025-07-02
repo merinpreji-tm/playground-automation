@@ -11,6 +11,7 @@ class HomePage extends Common {
     newArrivalProduct: Locator;
     newArrivalProductTitle: Locator;
     cartItemsCount: Locator;
+    cartIcon: Locator;
     wishlistItemsCount: Locator;
     wishlistIcon: Locator;
 
@@ -24,6 +25,7 @@ class HomePage extends Common {
         this.newArrivalProduct = this.page.locator(`//div[text()="New Arrivals"]/..//div[@data-index="0"]`);
         this.newArrivalProductTitle = this.page.locator(`//div[text()="New Arrivals"]/..//div[@data-index="0"]//h2`);
         this.cartItemsCount = this.page.locator(`//a[@href="/cart"]//span`);
+        this.cartIcon = this.page.locator(`//div[contains(@class,"relative")]//a[@href="/cart"]`);
         this.wishlistItemsCount = this.page.locator(`//a[@href="/wishlist"]//span`);
         this.wishlistIcon = this.page.locator(`//a[@href="/wishlist"]`);
     }
@@ -160,6 +162,13 @@ class HomePage extends Common {
         } catch (error) {
             return false;
         }
+    }
+
+    /**
+     * Method to navigate to cart
+     */
+    async goToCart(){
+        await this.actions.clickOn(this.cartIcon, "Cart Icon");
     }
 }
 export default HomePage;

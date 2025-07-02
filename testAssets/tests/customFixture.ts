@@ -4,7 +4,7 @@ import HomePage from "../pages/homePage";
 import ShopPage from "../pages/shopPage";
 import ComponentsPage from "../pages/componentsPage";
 import ProductDetailsPage from "../pages/productDetailsPage";
-// import CartPage from "../pages/cartPage";
+import CartPage from "../pages/cartPage";
 // import ContactPage from "../pages/contactPage";
 // import PaymentPage from "../pages/PaymentPage";
 // import ProfilePage from "../pages/profilePage";
@@ -17,7 +17,7 @@ type CustomFixture = {
     shopPage: ShopPage;
     componentsPage: ComponentsPage;
     productDetailsPage: ProductDetailsPage;
-    // cartPage: CartPage;
+    cartPage: CartPage;
     // contactPage: ContactPage;
     // paymentPage: PaymentPage;
     // profilePage: ProfilePage;
@@ -45,10 +45,10 @@ export const test = base.extend <CustomFixture> ({
         const productDetailsPage = new ProductDetailsPage(page);
         await use(productDetailsPage);
     },
-    // cartPage: async ({ page }, use) => {
-    //     const cartPage = new CartPage(page);
-    //     await use(cartPage);
-    // },
+    cartPage: async ({ page }, use) => {
+        const cartPage = new CartPage(page);
+        await use(cartPage);
+    },
     // contactPage: async ({ page }, use) => {
     //     const contactPage = new ContactPage(page);
     //     await use(contactPage);

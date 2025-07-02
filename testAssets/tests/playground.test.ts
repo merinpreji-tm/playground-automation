@@ -116,7 +116,7 @@ test.describe("Test the Playground web application", async () => {
     });
   });
 
-  test("TC07 - Verify if the user is able to add the product to the cart", async ({ common, homePage, productDetailsPage }) => {
+  test("TC07 - Verify if the user is able to add the product to the cart", async ({ common, homePage, productDetailsPage, cartPage }) => {
     await test.step(`Select the first product under "New Arrivals"`, async () => {
       cartItemsCount = await homePage.getCount(homePage.cartItemsCount);
       newArrivalProductTitle = await common.getText(homePage.newArrivalProductTitle);
@@ -134,7 +134,13 @@ test.describe("Test the Playground web application", async () => {
       expect(cartItemCountIncreased, "Number of items in the cart should be increased").toBe(true);
     });
 
-    // Resetting the cart to remove added item in cart
+    // Navigating to cart and Resetting the cart to remove added item in cart
+    await test.step("Navigate to cart page", async () => {
+      await homePage.goToCart();
+      const pageTitle = await common.getText(cartPage.pageTitle);
+      expect(pageTitle, `Page title should be '${playgroundData.titles.cart}'`).toBe(playgroundData.titles.cart);
+    });
+
     await test.step("Click on 'Reset Cart' button", async () => {
       await common.clickButton(playgroundData.buttons.resetCart);
       const cartItemCount = await homePage.hasCountBecomeZero(homePage.cartItemsCount);
