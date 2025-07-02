@@ -40,12 +40,28 @@ export class Common {
     }
 
     /**
+     * Method to click a button
+     * @param {string}
+    */
+    async clickButton(text: string) {
+        await this.actions.clickButton(this.button(text), `${text}`);
+    }
+
+    /**
      * Method to click navigation menu
      * @param {string} menu
     */
     async clickNavigationMenu(menu: string) {
-        await test.step(`Click on ${menu} in the navigation bar`, async () => {
-            await this.actions.clickOn(this.navigationMenu(menu), `Navigation menu '${menu}'`);
-        });
+        await this.actions.clickOn(this.navigationMenu(menu), `Navigation menu '${menu}'`);
+    }
+ 
+    /**
+     * Method to get text inside a locator
+     * @param {Locator} locator
+     * @returns text inside the locator
+    */
+    async getText(locator: Locator){
+        await this.actions.waitForPageToLoad();
+        return await locator.innerText();
     }
 }

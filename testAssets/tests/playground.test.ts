@@ -3,6 +3,19 @@ import * as playgroundData from "../test-data/playground-data.json";
 import * as env from "../test-data/env-test.json";
 
 test.describe("Test the Playground web application", async () => {
+  let popWindowContent = "";
+  let searchedProductTitle = "";
+  let newArrivalProductTitle = "";
+  let cartItemsCount = 0;
+  let wishlistItemsCount = 0;
+  let productQuantity = 0;
+  let laptopTitle = "";
+  let mobileTitle = "";
+  let laptopPrice = 0;
+  let mobilePrice = 0;
+  let laptopQuantity = 0;
+  let mobileQuantity = 0;
+  let sumOfPrices = 0;
   test.beforeEach(async ({ page, common, homePage }) => {
     await test.step("Launch the website and verify that home page is displayed", async () => {
       await common.launchUrl(env.baseUrl);
@@ -37,4 +50,31 @@ test.describe("Test the Playground web application", async () => {
       expect(resultsAreValid, `Products are of ${playgroundData.filters.brand.sectionTitle} '${playgroundData.filters.brand.brandToSelect}'`).toBe(true);
     });
   });
+
+  test("TC02 - Verify pop up window is displayed", async ({ common, homePage, componentsPage }) => {
+    await test.step(`Navigate to '${playgroundData.navigationMenu.components}' page using menu option`, async () => {
+      await homePage.clickNavigationMenu(playgroundData.navigationMenu.components);
+      const pageTitle = await common.getText(componentsPage.pageTitle);
+      expect(pageTitle, `Page title should be ${playgroundData.titles.componentsPage}`).toBe(playgroundData.titles.componentsPage);
+    });
+
+    await test.step(`Click the 'Learn more' link on the '${playgroundData.cardTitles.popWindow}' tile and verify whether ${playgroundData.buttons.openPopWindow} button is visible`, async () => {
+      await componentsPage.clickLearnMore(playgroundData.cardTitles.popWindow);
+      const isPopWindowButtonVisible = await componentsPage.isOpenPopWindowButtonVisible(playgroundData.buttons.openPopWindow);
+      expect(isPopWindowButtonVisible, `'${playgroundData.buttons.openPopWindow}' should be displayed`).toBe(true);
+    });
+
+    await test.step(`Click on the 'Open Pop Window' button and verify the pop up window content to be '${playgroundData.texts.popWindowContent}'`, async () => {
+      await common.clickButton(playgroundData.buttons.openPopWindow);
+      popWindowContent = await common.getText(common.ptag);
+      expect(popWindowContent, `Pop Window Content should be ${playgroundData.texts.popWindowContent}`).toBe(playgroundData.texts.popWindowContent);
+    });
+
+    await test.step(`Click on the Close button and ensure the pop window is closed`, async () => {
+      await common.clickButton(playgroundData.buttons.close);
+      const isPopWindowButtonVisible = await componentsPage.isOpenPopWindowButtonVisible(playgroundData.buttons.openPopWindow);
+      expect(isPopWindowButtonVisible, `'${playgroundData.buttons.openPopWindow}' should be displayed`).toBe(true);
+    });
+  });
+
 });

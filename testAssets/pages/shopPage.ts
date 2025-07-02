@@ -96,11 +96,11 @@ class ShopPage extends Common {
      * @param {string} filter
      * @param {string} option
     */
-    async verifyAppliedFilter(filter: string, option: string) {
-        await this.clickFilter(filter);
-        await this.actions.scrollDownToTargetLocator(this.filterOption(option));
-        const checkBox = await this.filterOption(option);
-        return await checkBox.isChecked();
-    }
+    // async verifyAppliedFilter(filter: string, option: string) {
+    //     await this.clickFilter(filter);
+    //     await this.actions.scrollDownToTargetLocator(this.filterOption(option));
+    //     const checkBox = await this.filterOption(option);
+    //     return await checkBox.isChecked();
+    // }
 }
 export default ShopPage;
