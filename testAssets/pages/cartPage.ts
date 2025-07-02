@@ -32,11 +32,14 @@ class CartPage extends Common {
         });
     }
 
+    /**
+     * Method to get quantity of product
+     * @param productName 
+     * @returns quantity of product as integer
+     */
     async getProductQuantity(productName: string){
-        return await test.step(`Get the quantity of the product ${productName}`, async () => {
-            const productQuantity = await this.quantity(productName).innerText();
-            return parseInt(productQuantity);
-        });
+        const productQuantity = await this.quantity(productName).innerText();
+        return parseInt(productQuantity);
     }
 
     async getProductPrice(productName: string){
@@ -47,27 +50,28 @@ class CartPage extends Common {
         });
     }
 
+    /**
+     * Method to increase quantity of a product
+     * @param count 
+     * @param productName 
+     */
     async increaseItemCount(count: number, productName: string) {
-        await test.step(`Increase item count by ${count}`, async () => {
-            const initialQty = await this.getProductQuantity(productName);
-
-            for (let i = 0; i < count; i++) {
-                await this.clickPlusButton(productName);
-
-                // Wait until quantity increases
-                await expect.poll(async () => {
-                    return await this.getProductQuantity(productName);
-                }, {
-                    timeout: env.waitFor.HIGH,
-                    message: `Product quantity did not increase after clicking '+'`
-                }).toBe(initialQty + i + 1);
-            }
-        });
+        const initialQuantity = await this.getProductQuantity(productName);
+        for (let i = 0; i < count; i++) {
+            await this.clickPlusButton(productName);
+            // Wait until quantity increases
+            await expect.poll(async () => {
+                return await this.getProductQuantity(productName);
+            }, {
+                timeout: env.waitFor.HIGH,
+                message: `Product quantity did not increase after clicking '+'`
+            }).toBe(initialQuantity + i + 1);
+        }
     }
 
     async decreaseItemCount(count: number, productName: string) {
         await test.step(`Decrease item count by ${count}`, async () => {
-            const initialQty = await this.getProductQuantity(productName);
+            const initialQuantity = await this.getProductQuantity(productName);
 
             for (let i = 0; i < count; i++) {
                 await this.clickMinusButton(productName);
@@ -78,7 +82,7 @@ class CartPage extends Common {
                 }, {
                     timeout: env.waitFor.HIGH,
                     message: `Product quantity did not decrease after clicking '-'`
-                }).toBe(initialQty - i - 1);
+                }).toBe(initialQuantity - i - 1);
             }
         });
     }
