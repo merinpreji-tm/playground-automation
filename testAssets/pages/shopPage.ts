@@ -23,6 +23,10 @@ class ShopPage extends Common {
         this.productsDiv = this.page.locator(`//div[@class="w-full"]/parent::div[contains(@class,"grid")]`);
     }
 
+    /**
+     * Method to click a filter dropdown
+     * @param filter 
+     */
     async clickFilter(filter: string) {
         await this.actions.clickDropdown(this.filter(filter), `Shop by ${filter}`);
     }
@@ -96,11 +100,11 @@ class ShopPage extends Common {
      * @param {string} filter
      * @param {string} option
     */
-    // async verifyAppliedFilter(filter: string, option: string) {
-    //     await this.clickFilter(filter);
-    //     await this.actions.scrollDownToTargetLocator(this.filterOption(option));
-    //     const checkBox = await this.filterOption(option);
-    //     return await checkBox.isChecked();
-    // }
+    async verifyAppliedFilter(filter: string, option: string) {
+        await this.clickFilter(filter);
+        await this.actions.scrollDownToTargetLocator(this.filterOption(option));
+        const checkBox = await this.filterOption(option);
+        return await checkBox.isChecked();
+    }
 }
 export default ShopPage;

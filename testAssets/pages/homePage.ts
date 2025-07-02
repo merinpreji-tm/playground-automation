@@ -6,7 +6,7 @@ class HomePage extends Common {
     searchBar: Locator;
     product: Locator;
     productTitle: Locator;
-    // shopNowButton: (value: any) => any;
+    shopNowButton: (value: any) => any;
     // newArrivalProduct: Locator;
     // newArrivalProductTitle: Locator;
     // cartItemsCount: Locator;
@@ -20,7 +20,7 @@ class HomePage extends Common {
         this.searchBar = this.page.locator(`//input[@placeholder="Search your products here"]`);
         this.product = this.page.locator(`(//div[contains(@class,"gap-8 p-10")])[1]`);
         this.productTitle = this.page.locator(`(//p[contains(@class,"font-semibold text-lg")])[1]`);
-        // this.shopNowButton = (category) => this.page.locator(`//h2[text()="${category}"]/..//button[text()="Shop Now"]`);
+        this.shopNowButton = (category) => this.page.locator(`//h2[text()="${category}"]/..//button[text()="Shop Now"]`);
         // this.newArrivalProduct = this.page.locator(`//div[text()="New Arrivals"]/..//div[@data-index="0"]`);
         // this.newArrivalProductTitle = this.page.locator(`//div[text()="New Arrivals"]/..//div[@data-index="0"]//h2`);
         // this.cartItemsCount = this.page.locator(`//a[@href="/cart"]//span`);
@@ -35,13 +35,24 @@ class HomePage extends Common {
         await this.actions.clickOn(this.profileIcon, "Profile Icon");
     }
 
-    async enterEmailId(email: string) {
-        await this.actions.typeText(this.inputField("email"), email, "Email Address field");
-    };
+    /**
+     * Method to click 'Shop Now' button
+     * @param category 
+     */
+    async clickShopNow(category: string) {
+        await this.actions.clickButton(this.shopNowButton(category), "Shop Now");
+    }
 
-    async enterPassword(password: string) {
+    /**
+     * Method to type email and password
+     * @param email 
+     * @param password 
+     */
+    async enterEmailIdAndPassword(email: string, password: string) {
+        await this.actions.typeText(this.inputField("email"), email, "Email Address field");
         await this.actions.typeText(this.inputField("password"), password, "Password field");
     };
+
 
     /**
      * Method to login to playground by valid email and password
@@ -53,9 +64,8 @@ class HomePage extends Common {
         await this.clickProfileIcon();
         await this.actions.clickOn(this.liText(text), `${text}`);
         await this.actions.waitForPageToLoad();
-        await this.enterEmailId(email);
-        await this.enterPassword(password);
-        await this.actions.clickButton(this.button(text), `${text}`);
+        await this.enterEmailIdAndPassword(email, password);
+        await this.clickButton(text);
         console.log("Logged in successfully");
         await this.actions.waitForElementToBeDisappear(this.ptagText("Login to your account"));
     };

@@ -96,4 +96,11 @@ test.describe("Test the Playground web application", async () => {
     });
   });
 
+  test("TC05 - Verify if the user is able to select a product by clicking the shop now button or clicking on the product", async ({ homePage, shopPage }) => {
+    await test.step(`Click on 'Shop Now' button in '${playgroundData.filters.category.brandToSelect.laptops}' card`, async () => {
+      await homePage.clickShopNow(playgroundData.filters.category.brandToSelect.laptops);
+      const isChecked = await shopPage.verifyAppliedFilter(playgroundData.filters.category.sectionTitle, playgroundData.filters.category.brandToSelect.laptops)
+      expect(isChecked, `'${playgroundData.filters.category.brandToSelect.laptops}' should be selected under 'Shop by ${playgroundData.filters.category.sectionTitle}' section`).toBe(true);
+    });
+  });
 });
