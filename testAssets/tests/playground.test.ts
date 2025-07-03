@@ -383,4 +383,18 @@ test.describe("Test the Playground web application", async () => {
       expect(pageTitle, `Page heading should be ${playgroundData.titles.payment}`).toBe(playgroundData.titles.payment);
     });
   });
+
+  test("TC14 - Verify the Contact tab", async ({ common, homePage, contactPage }) => {
+    await test.step(`Navigate to '${playgroundData.navigationMenu.contact}' page using menu option`, async () => {
+      await homePage.clickNavigationMenu(playgroundData.navigationMenu.contact);
+      const pageTitle = await common.getText(common.pageTitle);
+      expect(pageTitle, `Page heading should be ${playgroundData.titles.contact}`).toBe(playgroundData.titles.contact);
+    });
+
+    await test.step(`Verify that the user is able to fill details like name, email and message and submit the details`, async () => {
+      await contactPage.submitContactForm(playgroundData.contact.name, playgroundData.contact.email, playgroundData.contact.messages, playgroundData.buttons.post);
+      const isMessageCorrect = await contactPage.verifySuccessMessage(playgroundData.contact.name, playgroundData.contact.email);
+      expect(isMessageCorrect, `Success messsage should contain the name '${playgroundData.contact.name}' and email '${playgroundData.contact.email}'`).toBe(true);
+    });
+  });
 });

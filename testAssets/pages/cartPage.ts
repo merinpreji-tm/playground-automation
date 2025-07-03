@@ -20,16 +20,20 @@ class CartPage extends Common {
         this.productTitles = this.page.locator(`//h1[@class="font-titleFont font-semibold"]`);
     }
 
+    /**
+     * Method to click + button
+     * @param productName 
+     */
     async clickPlusButton(productName: string) {
-        await test.step("Click on '+' button", async () => {
-            await this.actions.clickButton(this.plusButton(productName), "+");
-        });
+        await this.actions.clickButton(this.plusButton(productName), "+");
     }
 
+    /**
+     * Method to click - button
+     * @param productName 
+     */
     async clickMinusButton(productName: string) {
-        await test.step("Click on '-' button", async () => {
-            await this.actions.clickButton(this.minusButton(productName), "-");
-        });
+        await this.actions.clickButton(this.minusButton(productName), "-");
     }
 
     /**
