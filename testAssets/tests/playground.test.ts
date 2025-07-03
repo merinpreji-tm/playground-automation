@@ -290,8 +290,8 @@ test.describe("Test the Playground web application", async () => {
 
       await test.step(`Click on the first product and verify that product page displays the selected product`, async () => {
         const title = await shopPage.clickProduct();
-        laptopTitle = await common.getText(productDetailsPage.productTitle);
-        expect(title, "Selected product title should be same as title displayed in product details page").toBe(laptopTitle);
+        mobileTitle = await common.getText(productDetailsPage.productTitle);
+        expect(title, "Selected product title should be same as title displayed in product details page").toBe(mobileTitle);
       });
 
       await test.step("Click on 'Add to Cart' button", async () => {
@@ -416,8 +416,8 @@ test.describe("Test the Playground web application", async () => {
 
     await test.step(`Click on the first product and verify that product page displays the selected product`, async () => {
       const title = await shopPage.clickProduct();
-      laptopTitle = await common.getText(productDetailsPage.productTitle);
-      expect(title, "Selected product title should be same as title displayed in product details page").toBe(laptopTitle);
+      mobileTitle = await common.getText(productDetailsPage.productTitle);
+      expect(title, "Selected product title should be same as title displayed in product details page").toBe(mobileTitle);
     });
 
     await test.step("Click on 'Add to Cart' button", async () => {
@@ -504,8 +504,8 @@ test.describe("Test the Playground web application", async () => {
 
       await test.step(`Click on the first product and verify that product page displays the selected product`, async () => {
         const title = await shopPage.clickProduct();
-        laptopTitle = await common.getText(productDetailsPage.productTitle);
-        expect(title, "Selected product title should be same as title displayed in product details page").toBe(laptopTitle);
+        mobileTitle = await common.getText(productDetailsPage.productTitle);
+        expect(title, "Selected product title should be same as title displayed in product details page").toBe(mobileTitle);
       });
 
       await test.step("Click on 'Add to Cart' button", async () => {
@@ -544,5 +544,4 @@ test.describe("Test the Playground web application", async () => {
       expect(subtotal, `The Subtotal amount should be equal to the total price of '${laptopTitle}' and '${mobileTitle}'`).toBe(sumOfPrices);
     });
   });
-
 });
