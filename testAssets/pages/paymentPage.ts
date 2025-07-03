@@ -46,13 +46,15 @@ class PaymentPage extends Common {
         return isChecked && isDisabled;
     }
 
+    /**
+     * Method to get the subtotal of cart items
+     * @returns subtotal amount
+     */
     async getSubtotal(){
-        return await test.step(`Get the subtotal of cart items`, async () => {
-            await this.actions.waitForPageToLoad();
-            const subtotalText = await this.subtotal.innerText();
-            const subtotal = parseFloat(subtotalText.replace(/[^\d.]/g, ""));
-            return subtotal;
-        })
+        await this.actions.waitForPageToLoad();
+        const subtotalText = await this.subtotal.innerText();
+        const subtotal = parseFloat(subtotalText.replace(/[^\d.]/g, ""));
+        return subtotal;
     }
     
 }

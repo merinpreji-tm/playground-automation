@@ -46,12 +46,15 @@ class CartPage extends Common {
         return parseInt(productQuantity);
     }
 
+    /**
+     * Method to get the price of a product
+     * @param productName 
+     * @returns price as number
+     */
     async getProductPrice(productName: string){
-        return await test.step(`Get the price of the product ${productName}`, async () => {
-            const priceText = await this.price(productName).innerText();
-            const productPrice = parseFloat(priceText.replace(/[^\d.]/g, ""));
-            return productPrice;
-        });
+        const priceText = await this.price(productName).innerText();
+        const productPrice = parseFloat(priceText.replace(/[^\d.]/g, ""));
+        return productPrice;
     }
 
     /**
