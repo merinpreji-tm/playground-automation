@@ -544,4 +544,55 @@ test.describe("Test the Playground web application", async () => {
       expect(subtotal, `The Subtotal amount should be equal to the total price of '${laptopTitle}' and '${mobileTitle}'`).toBe(sumOfPrices);
     });
   });
+
+  test("TC17 - Verify the continue shopping button after resetting the cart", async ({ common, homePage, shopPage, productDetailsPage, cartPage }) => {
+    await test.step(`Select the first product under "New Arrivals"`, async () => {
+      cartItemsCount = await homePage.getCount(homePage.cartItemsCount);
+      newArrivalProductTitle = await common.getText(homePage.newArrivalProductTitle);
+      await homePage.clickNewArrivalProduct(newArrivalProductTitle);
+    });
+
+    await test.step("Verify that product page displays the selected product", async () => {
+      const productTitle = await common.getText(productDetailsPage.productTitle);
+      expect(newArrivalProductTitle, "Selected product title should be same as title displayed in product details page").toBe(productTitle);
+    });
+
+    await test.step("Click on 'Add to Cart' button", async () => {
+      await common.clickButton(playgroundData.buttons.addToCart);
+      const cartItemCountIncreased = await homePage.hasCountIncreased(cartItemsCount, homePage.cartItemsCount);
+      expect(cartItemCountIncreased, "Number of items in the cart should be increased").toBe(true);
+    });
+
+    await test.step("Navigate to cart page", async () => {
+      await homePage.goToCart();
+      const pageTitle = await common.getText(cartPage.pageTitle);
+      expect(pageTitle, `Page title should be '${playgroundData.titles.cart}'`).toBe(playgroundData.titles.cart);
+    });
+
+    await test.step("Click on 'Reset Cart' button", async () => {
+      await common.clickButton(playgroundData.buttons.resetCart);
+      const cartItemCount = await homePage.hasCountBecomeZero(homePage.cartItemsCount);
+      expect(cartItemCount, "Number of items in the cart should be zero").toBe(true);
+    });
+
+    await test.step("Click on 'Continue Shopping' button", async () => {
+      await common.clickButton(playgroundData.buttons.continueShopping);
+      const isShopVisible = await shopPage.verifyMenuIsVisible();
+      expect(isShopVisible, "Shop text should be displayed").toBe(true);
+    });
+  });
+
+  test("TC18 - Verify the continue shopping button in about tab", async ({ common, homePage, shopPage }) => {
+    await test.step(`Navigate to '${playgroundData.navigationMenu.about}' page using menu option`, async () => {
+      await homePage.clickNavigationMenu(playgroundData.navigationMenu.about);
+      const pageTitle = await common.getText(common.pageTitle);
+      expect(pageTitle, `Page heading should be ${playgroundData.titles.about}`).toBe(playgroundData.titles.about);
+    });
+
+    await test.step("Click on 'Continue Shopping' button", async () => {
+      await common.clickButton(playgroundData.buttons.continueShopping);
+      const isShopVisible = await shopPage.verifyMenuIsVisible();
+      expect(isShopVisible, "Shop text should be displayed").toBe(true);
+    });
+  });
 });
