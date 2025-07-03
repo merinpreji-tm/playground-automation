@@ -118,7 +118,7 @@ test.describe("Test the Playground web application", async () => {
 
   test("TC07 - Verify if the user is able to add the product to the cart", async ({ common, homePage, productDetailsPage, cartPage }) => {
     await test.step(`Select the first product under "New Arrivals"`, async () => {
-      cartItemsCount = await homePage.getCount(homePage.cartItemsCount);
+      cartItemsCount = await common.getCount(homePage.cartItemsCount);
       newArrivalProductTitle = await common.getText(homePage.newArrivalProductTitle);
       await homePage.clickNewArrivalProduct(newArrivalProductTitle);
     });
@@ -150,7 +150,7 @@ test.describe("Test the Playground web application", async () => {
 
   test("TC08 - Verify if the user can add multiple quantity of the same product to the cart", async ({ common, homePage, productDetailsPage, cartPage }) => {
     await test.step(`Select the first product under "New Arrivals"`, async () => {
-      cartItemsCount = await homePage.getCount(homePage.cartItemsCount);
+      cartItemsCount = await common.getCount(homePage.cartItemsCount);
       newArrivalProductTitle = await common.getText(homePage.newArrivalProductTitle);
       await homePage.clickNewArrivalProduct(newArrivalProductTitle);
     });
@@ -192,7 +192,7 @@ test.describe("Test the Playground web application", async () => {
 
   test("TC09 - Verify if the user can reduce quantity of the same product from the cart", async ({ common, homePage, productDetailsPage, cartPage }) => {
     await test.step(`Select the first product under "New Arrivals"`, async () => {
-      cartItemsCount = await homePage.getCount(homePage.cartItemsCount);
+      cartItemsCount = await common.getCount(homePage.cartItemsCount);
       newArrivalProductTitle = await common.getText(homePage.newArrivalProductTitle);
       await homePage.clickNewArrivalProduct(newArrivalProductTitle);
     });
@@ -324,7 +324,7 @@ test.describe("Test the Playground web application", async () => {
 
   test("TC11 - Verify if the user can reset the cart", async ({ common, homePage, productDetailsPage, cartPage }) => {
     await test.step(`Select the first product under "New Arrivals"`, async () => {
-      cartItemsCount = await homePage.getCount(homePage.cartItemsCount);
+      cartItemsCount = await common.getCount(homePage.cartItemsCount);
       newArrivalProductTitle = await common.getText(homePage.newArrivalProductTitle);
       await homePage.clickNewArrivalProduct(newArrivalProductTitle);
     });
@@ -355,7 +355,7 @@ test.describe("Test the Playground web application", async () => {
 
   test("TC13 - Verify the Proceed to checkout button", async ({ common, homePage, productDetailsPage, cartPage }) => {
     await test.step(`Select the first product under "New Arrivals"`, async () => {
-      cartItemsCount = await homePage.getCount(homePage.cartItemsCount);
+      cartItemsCount = await common.getCount(homePage.cartItemsCount);
       newArrivalProductTitle = await common.getText(homePage.newArrivalProductTitle);
       await homePage.clickNewArrivalProduct(newArrivalProductTitle);
     });
@@ -547,7 +547,7 @@ test.describe("Test the Playground web application", async () => {
 
   test("TC17 - Verify the continue shopping button after resetting the cart", async ({ common, homePage, shopPage, productDetailsPage, cartPage }) => {
     await test.step(`Select the first product under "New Arrivals"`, async () => {
-      cartItemsCount = await homePage.getCount(homePage.cartItemsCount);
+      cartItemsCount = await common.getCount(homePage.cartItemsCount);
       newArrivalProductTitle = await common.getText(homePage.newArrivalProductTitle);
       await homePage.clickNewArrivalProduct(newArrivalProductTitle);
     });
@@ -593,6 +593,54 @@ test.describe("Test the Playground web application", async () => {
       await common.clickButton(playgroundData.buttons.continueShopping);
       const isShopVisible = await shopPage.verifyMenuIsVisible();
       expect(isShopVisible, "Shop text should be displayed").toBe(true);
+    });
+  });
+
+  test("TC19 - Verify if the user is able to add the product to the wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
+    await test.step(`Navigate to '${playgroundData.navigationMenu.shop}' page using menu option`, async () => {
+      await homePage.clickNavigationMenu(playgroundData.navigationMenu.shop);
+      const isShopVisible = await shopPage.verifyMenuIsVisible();
+      expect(isShopVisible, "Shop text should be displayed").toBe(true);
+    });
+
+    await test.step(`Filter the product listing by selecting the category '${playgroundData.filters.category.brandToSelect.mobiles}'`, async () => {
+      await shopPage.applyFilter(playgroundData.filters.category.sectionTitle, playgroundData.filters.category.brandToSelect.mobiles);
+    });
+
+    await test.step(`Verify that the results are related to ${playgroundData.filters.category.sectionTitle} '${playgroundData.filters.category.brandToSelect.mobiles}'`, async () => {
+      const resultsAreValid = await shopPage.verifyFilterResults(playgroundData.filters.category.sectionTitle, playgroundData.filters.category.brandToSelect.mobiles);
+      expect(resultsAreValid, `Products are of ${playgroundData.filters.category.sectionTitle} '${playgroundData.filters.category.brandToSelect.mobiles}'`).toBe(true);
+    });
+
+    await test.step(`Click on the first product and verify that product page displays the selected product`, async () => {
+      const title = await shopPage.clickProduct();
+      mobileTitle = await common.getText(productDetailsPage.productTitle);
+      expect(title, "Selected product title should be same as title displayed in product details page").toBe(mobileTitle);
+    });
+
+    await test.step("Click on 'Add to Wishlist' button and verify the success message displayed", async () => {
+      wishlistItemsCount = await common.getCount(homePage.wishlistItemsCount);
+      await common.clickButton(playgroundData.buttons.addToWishlist);
+      const successMessage = await productDetailsPage.getSuccessMessage();
+      expect(successMessage, `Auto-disappearing banner content displayed at the top right side of the page should be '${playgroundData.messages.wishlistSuccess}'`).toBe(playgroundData.messages.wishlistSuccess);
+    });
+
+    await test.step("Verify that the wishlist shows the number of products added", async () => {
+      const wishlistItemCountIncreased = await homePage.hasCountIncreased(wishlistItemsCount, homePage.wishlistItemsCount);
+      expect(wishlistItemCountIncreased, "Number of items in the wishlist should be increased").toBe(true);
+    });
+
+    // Removing item from wishlist
+    await test.step("Navigate to wishlist", async () => {
+      await homePage.goToWishlist();
+      const pageTitle = await common.getText(common.pageTitle);
+      expect(pageTitle, `Page title should be '${playgroundData.titles.wishlist}'`).toBe(playgroundData.titles.wishlist);
+    });
+
+    await test.step("Click on 'Reset Wishlist' button", async () => {
+      await common.clickButton(playgroundData.buttons.resetWishlist);
+      const wishlistItemCount = await homePage.hasCountBecomeZero(homePage.wishlistItemsCount);
+      expect(wishlistItemCount, "Number of items in the wishlist should be zero").toBe(true);
     });
   });
 });

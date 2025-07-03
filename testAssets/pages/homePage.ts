@@ -170,5 +170,12 @@ class HomePage extends Common {
     async goToCart(){
         await this.actions.clickOn(this.cartIcon, "Cart Icon");
     }
+
+    /**
+     * Method to navigate to wishlist
+     */
+    async goToWishlist(){
+        await this.actions.clickOn(this.wishlistIcon, "Wishlist Icon");
+    }
 }
 export default HomePage;
