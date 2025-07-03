@@ -7,8 +7,7 @@ import ProductDetailsPage from "../pages/productDetailsPage";
 import CartPage from "../pages/cartPage";
 import ContactPage from "../pages/contactPage";
 import PaymentPage from "../pages/paymentPage";
-// import ProfilePage from "../pages/profilePage";
-// import SignUpPage from "../pages/signUpPage";
+import ProfilePage from "../pages/profilePage";
 
 type CustomFixture = {
     page: Page;
@@ -20,8 +19,7 @@ type CustomFixture = {
     cartPage: CartPage;
     contactPage: ContactPage;
     paymentPage: PaymentPage;
-    // profilePage: ProfilePage;
-    // signUpPage: SignUpPage;
+    profilePage: ProfilePage;
 }
 
 export const test = base.extend <CustomFixture> ({
@@ -57,14 +55,10 @@ export const test = base.extend <CustomFixture> ({
         const paymentPage = new PaymentPage(page);
         await use(paymentPage);
     },
-    // profilePage: async ({ page }, use) => {
-    //     const profilePage = new ProfilePage(page);
-    //     await use(profilePage);
-    // },
-    // signUpPage: async ({ page }, use) => {
-    //     const signUpPage = new SignUpPage(page);
-    //     await use(signUpPage);
-    // }
+    profilePage: async ({ page }, use) => {
+        const profilePage = new ProfilePage(page);
+        await use(profilePage);
+    },
 });
 
 export { expect };

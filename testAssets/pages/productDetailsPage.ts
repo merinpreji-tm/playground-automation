@@ -11,12 +11,14 @@ class ProductDetailsPage extends Common {
         this.successMessage = this.page.locator(`(//div[@role="alert"]/div)[2]`);
     }
 
+    /**
+     * Method to get the success message displayed after adding a product to wishlist
+     * @returns message displayed
+     */
     async getSuccessMessage(){
-        return await test.step(`Get the success message displayed after adding a product to wishlist`, async () => {
-            await this.actions.waitForPageToLoad();
-            const successMessage = await this.getText(this.successMessage);
-            return successMessage;
-        });
+        await this.actions.waitForPageToLoad();
+        const successMessage = await this.getText(this.successMessage);
+        return successMessage;
     }
 }
 export default ProductDetailsPage;

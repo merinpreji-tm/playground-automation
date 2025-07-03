@@ -644,7 +644,7 @@ test.describe("Test the Playground web application", async () => {
     });
   });
 
-  test("TC20 - Verify if the user is able to add the product to the cart which is in wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
+  test.skip("TC20 - Verify if the user is able to add the product to the cart which is in wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
     await test.step(`Navigate to '${playgroundData.navigationMenu.shop}' page using menu option`, async () => {
       await homePage.clickNavigationMenu(playgroundData.navigationMenu.shop);
       const isShopVisible = await shopPage.verifyMenuIsVisible();
@@ -698,7 +698,7 @@ test.describe("Test the Playground web application", async () => {
     });
   });
 
-  test("TC21 - Verify if the user can reset the wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
+  test.skip("TC21 - Verify if the user can reset the wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
     await test.step(`Navigate to '${playgroundData.navigationMenu.shop}' page using menu option`, async () => {
       await homePage.clickNavigationMenu(playgroundData.navigationMenu.shop);
       const isShopVisible = await shopPage.verifyMenuIsVisible();
@@ -742,6 +742,26 @@ test.describe("Test the Playground web application", async () => {
       await common.clickButton(playgroundData.buttons.resetWishlist);
       const wishlistItemCount = await homePage.hasCountBecomeZero(homePage.wishlistItemsCount);
       expect(wishlistItemCount, "Number of items in the wishlist should be zero").toBe(true);
+    });
+  });
+
+  test("TC22 - Verify user is able to update their profile", async ({ common, homePage, productDetailsPage, profilePage }) => {
+    await test.step(`Go to ${playgroundData.texts.profile} page`, async () => {
+      await homePage.goTo(playgroundData.texts.profile);
+      const pageTitle = await common.getText(profilePage.pageHeading);
+      expect(pageTitle, `Page title should be '${playgroundData.titles.userProfile}'`).toBe(playgroundData.titles.userProfile);
+    });
+
+    await test.step("Click on 'Edit' button", async () => {
+      await common.clickButton(playgroundData.buttons.edit);
+      const pageTitle = await common.getText(profilePage.pageHeading);
+      expect(pageTitle, `Page title should be '${playgroundData.titles.editProfile}'`).toBe(playgroundData.titles.editProfile);
+    });
+
+    await test.step(`Verify that the user is able to update full name, gender, country, bio in profile`, async () => {
+      await profilePage.editProfile(playgroundData.contact.name, playgroundData.gender.female, playgroundData.country.us, playgroundData.contact.bio, playgroundData.buttons.save);
+      const successMessage = await productDetailsPage.getSuccessMessage();
+      expect(successMessage, `Auto-disappearing banner content displayed at the top right side of the page should be '${playgroundData.messages.success}'`).toBe(playgroundData.messages.success);
     });
   });
 

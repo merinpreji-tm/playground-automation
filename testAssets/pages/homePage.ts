@@ -177,5 +177,16 @@ class HomePage extends Common {
     async goToWishlist(){
         await this.actions.clickOn(this.wishlistIcon, "Wishlist Icon");
     }
+
+    /**
+     * Method to navigate to Profile, My Orders, Sign Up
+     * @param text 
+     */
+    async goTo(text: string) {
+        await test.step("Go to 'My Orders'", async () => {
+            await this.clickProfileIcon();
+            await this.actions.clickOn(this.liText(text), `${text}`);
+        });
+    };
 }
 export default HomePage;
