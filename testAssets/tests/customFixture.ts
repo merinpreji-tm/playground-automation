@@ -6,7 +6,7 @@ import ComponentsPage from "../pages/componentsPage";
 import ProductDetailsPage from "../pages/productDetailsPage";
 import CartPage from "../pages/cartPage";
 import ContactPage from "../pages/contactPage";
-// import PaymentPage from "../pages/PaymentPage";
+import PaymentPage from "../pages/paymentPage";
 // import ProfilePage from "../pages/profilePage";
 // import SignUpPage from "../pages/signUpPage";
 
@@ -19,7 +19,7 @@ type CustomFixture = {
     productDetailsPage: ProductDetailsPage;
     cartPage: CartPage;
     contactPage: ContactPage;
-    // paymentPage: PaymentPage;
+    paymentPage: PaymentPage;
     // profilePage: ProfilePage;
     // signUpPage: SignUpPage;
 }
