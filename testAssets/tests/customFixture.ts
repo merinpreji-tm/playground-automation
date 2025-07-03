@@ -53,10 +53,10 @@ export const test = base.extend <CustomFixture> ({
         const contactPage = new ContactPage(page);
         await use(contactPage);
     },
-    // paymentPage: async ({ page }, use) => {
-    //     const paymentPage = new PaymentPage(page);
-    //     await use(paymentPage);
-    // },
+    paymentPage: async ({ page }, use) => {
+        const paymentPage = new PaymentPage(page);
+        await use(paymentPage);
+    },
     // profilePage: async ({ page }, use) => {
     //     const profilePage = new ProfilePage(page);
     //     await use(profilePage);
