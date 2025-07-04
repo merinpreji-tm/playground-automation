@@ -1,4 +1,4 @@
-import { Locator, Page, test, expect } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 import { Common } from "./common";
 import * as env from "../test-data/env-test.json";
 

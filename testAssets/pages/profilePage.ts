@@ -1,4 +1,4 @@
-import { Locator, Page, test } from "@playwright/test";
+import { Locator, Page} from "@playwright/test";
 import { Common } from "./common";
 
 class ProfilePage extends Common {
@@ -32,12 +32,10 @@ class ProfilePage extends Common {
      * @param gender 
      */
     async selectGender(gender: string) {
-        await test.step(`Select '${gender}' from the gender dropdown`, async () => {
-            const isGenderSelected = await this.isGenderSelected(gender);
-            if(isGenderSelected === false){
-                await this.genderDropdown.selectOption(gender);
-            }
-        });
+        const isGenderSelected = await this.isGenderSelected(gender);
+        if(isGenderSelected === false){
+            await this.genderDropdown.selectOption(gender);
+        }
     }
 
     /**

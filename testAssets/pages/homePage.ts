@@ -1,4 +1,4 @@
-import { Locator, Page, test, expect } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 import { Common } from "./common";
 import * as env from "../test-data/env-test.json";
 
@@ -199,10 +199,8 @@ class HomePage extends Common {
      * @param text 
      */
     async goTo(text: string) {
-        await test.step("Go to 'My Orders'", async () => {
-            await this.clickProfileIcon();
-            await this.actions.clickOn(this.liText(text), `${text}`);
-        });
+        await this.clickProfileIcon();
+        await this.actions.clickOn(this.liText(text), `${text}`);
     };
 }
 export default HomePage;

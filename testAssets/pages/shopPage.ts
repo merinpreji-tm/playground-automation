@@ -1,4 +1,4 @@
-import { Locator, Page, test } from "@playwright/test";
+import { Locator, Page} from "@playwright/test";
 import { Common } from "./common";
 
 class ShopPage extends Common {
@@ -77,11 +77,9 @@ class ShopPage extends Common {
      * @param {string} option
     */
     async applyFilter(filter: string, option: string) {
-        await test.step(`Select '${option}' under ${filter} filter`, async () => {
-            await this.clickFilter(filter);
-            await this.actions.scrollDownToTargetLocator(this.filterOption(option));
-            await this.actions.clickCheckBox(this.filterOption(option), `${option}`);
-        });
+        await this.clickFilter(filter);
+        await this.actions.scrollDownToTargetLocator(this.filterOption(option));
+        await this.actions.clickCheckBox(this.filterOption(option), `${option}`);
     }
 
      /**
@@ -91,18 +89,14 @@ class ShopPage extends Common {
      * @returns true if tite of the product contains the selected filter option
     */
     async verifyFilterResults(filter: string, option: string) {
-        return await test.step(`Verify that products are of ${filter} '${option}'`, async () => {
-            const titleCount = await this.productTitle.count();
-
-            for (let i = 0; i < titleCount; i++) {
-                const titleText = await this.productTitle.nth(i).innerText();
-
-                if (!titleText.includes(option)) {
-                    return false;
-                }
+        const titleCount = await this.productTitle.count();
+        for (let i = 0; i < titleCount; i++) {
+            const titleText = await this.productTitle.nth(i).innerText();
+            if (!titleText.includes(option)) {
+                return false;
             }
-            return true;
-        });
+        }
+        return true;
     }
     
     /**
@@ -115,6 +109,39 @@ class ShopPage extends Common {
         await this.actions.scrollDownToTargetLocator(this.filterOption(option));
         const checkBox = await this.filterOption(option);
         return await checkBox.isChecked();
+    }
+
+    /**
+     * Method to verify that products are displayed in Grid view
+     * @returns true if products are displayed in Grid view
+     */
+    async isGridViewDisplayed() {
+        const classAttribute = await this.productsDiv.getAttribute("class");
+        if (!classAttribute) return false;
+        const expectedClasses = ["md:grid-cols-2", "xl:grid-cols-3", "gap-6"];
+        const isGridView = expectedClasses.every(cls => classAttribute.includes(cls));
+        return isGridView;
+    }
+
+    /**
+     * Method to verify that products are displayed in List view
+     * @returns true if products are displayed in List view
+     */
+    async isListViewDisplayed() {
+        const classAttribute = await this.productsDiv.getAttribute("class");
+        if (!classAttribute) return false;
+        const expectedClasses = ["gap-4"];
+        const isListView = expectedClasses.every(cls => classAttribute.includes(cls));
+        return isListView;
+    }
+
+    /**
+     * Method to toggle the product view between List and Grid
+     */
+    async changeProductView() {
+        const isCurrentlyGrid = await this.isGridViewDisplayed();
+        const targetView = isCurrentlyGrid ? "List" : "Grid";
+        await this.actions.clickOn(this.productViewIcon, `${targetView} View Icon`);
     }
 }
 export default ShopPage;

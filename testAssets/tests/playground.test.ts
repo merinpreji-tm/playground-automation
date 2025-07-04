@@ -597,7 +597,7 @@ test.describe("Test the Playground web application", async () => {
     });
   });
 
-  test.skip("TC19 - Verify if the user is able to add the product to the wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
+  test("TC19 - Verify if the user is able to add the product to the wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
     await test.step(`Navigate to '${playgroundData.navigationMenu.shop}' page using menu option`, async () => {
       await homePage.clickNavigationMenu(playgroundData.navigationMenu.shop);
       const isShopVisible = await shopPage.verifyMenuIsVisible();
@@ -622,7 +622,7 @@ test.describe("Test the Playground web application", async () => {
     await test.step("Click on 'Add to Wishlist' button and verify the success message displayed", async () => {
       wishlistItemsCount = await common.getCount(homePage.wishlistItemsCount);
       await common.clickButton(playgroundData.buttons.addToWishlist);
-      const successMessage = await productDetailsPage.getSuccessMessage();
+      const successMessage = await common.getText(common.successMessage);
       expect(successMessage, `Auto-disappearing banner content displayed at the top right side of the page should be '${playgroundData.messages.wishlistSuccess}'`).toBe(playgroundData.messages.wishlistSuccess);
     });
 
@@ -645,7 +645,7 @@ test.describe("Test the Playground web application", async () => {
     });
   });
 
-  test.skip("TC20 - Verify if the user is able to add the product to the cart which is in wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
+  test("TC20 - Verify if the user is able to add the product to the cart which is in wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
     await test.step(`Navigate to '${playgroundData.navigationMenu.shop}' page using menu option`, async () => {
       await homePage.clickNavigationMenu(playgroundData.navigationMenu.shop);
       const isShopVisible = await shopPage.verifyMenuIsVisible();
@@ -670,7 +670,7 @@ test.describe("Test the Playground web application", async () => {
     await test.step("Click on 'Add to Wishlist' button and verify the success message displayed", async () => {
       wishlistItemsCount = await common.getCount(homePage.wishlistItemsCount);
       await common.clickButton(playgroundData.buttons.addToWishlist);
-      const successMessage = await productDetailsPage.getSuccessMessage();
+      const successMessage = await common.getText(common.successMessage);
       expect(successMessage, `Auto-disappearing banner content displayed at the top right side of the page should be '${playgroundData.messages.wishlistSuccess}'`).toBe(playgroundData.messages.wishlistSuccess);
     });
 
@@ -699,7 +699,7 @@ test.describe("Test the Playground web application", async () => {
     });
   });
 
-  test.skip("TC21 - Verify if the user can reset the wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
+  test("TC21 - Verify if the user can reset the wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
     await test.step(`Navigate to '${playgroundData.navigationMenu.shop}' page using menu option`, async () => {
       await homePage.clickNavigationMenu(playgroundData.navigationMenu.shop);
       const isShopVisible = await shopPage.verifyMenuIsVisible();
@@ -724,7 +724,7 @@ test.describe("Test the Playground web application", async () => {
     await test.step("Click on 'Add to Wishlist' button and verify the success message displayed", async () => {
       wishlistItemsCount = await common.getCount(homePage.wishlistItemsCount);
       await common.clickButton(playgroundData.buttons.addToWishlist);
-      const successMessage = await productDetailsPage.getSuccessMessage();
+      const successMessage = await common.getText(common.successMessage);
       expect(successMessage, `Auto-disappearing banner content displayed at the top right side of the page should be '${playgroundData.messages.wishlistSuccess}'`).toBe(playgroundData.messages.wishlistSuccess);
     });
 
@@ -746,7 +746,7 @@ test.describe("Test the Playground web application", async () => {
     });
   });
 
-  test("TC22 - Verify user is able to update their profile", async ({ common, homePage, productDetailsPage, profilePage }) => {
+  test("TC22 - Verify user is able to update their profile", async ({ common, homePage, profilePage }) => {
     await test.step(`Go to ${playgroundData.texts.profile} page`, async () => {
       await homePage.goTo(playgroundData.texts.profile);
       const pageTitle = await common.getText(profilePage.pageHeading);
@@ -761,17 +761,49 @@ test.describe("Test the Playground web application", async () => {
 
     await test.step(`Verify that the user is able to update full name, gender, country, bio in profile`, async () => {
       await profilePage.editProfile(playgroundData.contact.name, playgroundData.gender.female, playgroundData.country.us, playgroundData.contact.bio, playgroundData.buttons.save);
-      const successMessage = await productDetailsPage.getSuccessMessage();
+      const successMessage = await common.getText(common.successMessage);
       expect(successMessage, `Auto-disappearing banner content displayed at the top right side of the page should be '${playgroundData.messages.success}'`).toBe(playgroundData.messages.success);
     });
   });
 
-  test("TC23 - Verify user is able to logout", async ({ homePage, productDetailsPage }) => {
+  test("TC23 - Verify user is able to logout", async ({ common, homePage }) => {
     await test.step(`Click on profile icon > Click on ${playgroundData.texts.logout} > Verify the success message displayed`, async () => {
       await homePage.logOut(playgroundData.texts.logout, playgroundData.messages.logoutAlert);
-      const successMessage = await productDetailsPage.getSuccessMessage();
+      const successMessage = await common.getText(common.successMessage);
       expect(successMessage, `Auto-disappearing banner content displayed at the top right side of the page should be '${playgroundData.messages.logoutSuccess}'`).toBe(playgroundData.messages.logoutSuccess);
     });
   });
 
+  test("TC25 - Verify that the default view (either list or grid) is displayed when the user navigates to the product page", async ({ homePage, shopPage }) => {
+    await test.step(`Navigate to '${playgroundData.navigationMenu.shop}' page using menu option`, async () => {
+      await homePage.clickNavigationMenu(playgroundData.navigationMenu.shop);
+      const isShopVisible = await shopPage.verifyMenuIsVisible();
+      expect(isShopVisible, "Shop text should be displayed").toBe(true);
+    });
+
+    await test.step(`Verify that the default view (grid) is displayed`, async () => {
+      const isDefaultViewGrid = await shopPage.isGridViewDisplayed();
+      expect(isDefaultViewGrid, "Default view mode of products should be Grid").toBe(true);
+    });
+
+    await test.step(`Switch to List View and verify that list view is displayed`, async () => {
+      await shopPage.changeProductView();
+      const isListViewDisplayed = await shopPage.isListViewDisplayed();
+      expect(isListViewDisplayed, "Products should be displayed in List View").toBe(true);
+    });
+
+    await test.step(`Switch to Grid View and verify that list view is displayed`, async () => {
+      await shopPage.changeProductView();
+      const isGridViewDisplayed = await shopPage.isGridViewDisplayed();
+      expect(isGridViewDisplayed, "Products should be displayed in Grid View").toBe(true);
+    });
+  });
+
+  test("TC26 - Verify users are able to view the ordered products in my orders page", async ({ common, homePage }) => {
+    await test.step(`Go to '${playgroundData.texts.myOrders}' page`, async () => {
+      await homePage.goTo(playgroundData.texts.myOrders);
+      const pageTitle = await common.getText(common.h1Tag);
+      expect(pageTitle, `Page title should be '${playgroundData.titles.myOrders}'`).toBe(playgroundData.titles.myOrders);
+    });
+  });
 });

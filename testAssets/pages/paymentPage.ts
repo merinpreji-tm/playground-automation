@@ -1,4 +1,4 @@
-import { Locator, Page, test } from "@playwright/test";
+import { Locator, Page} from "@playwright/test";
 import { Common } from "./common";
 
 class PaymentPage extends Common {

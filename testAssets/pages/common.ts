@@ -1,4 +1,4 @@
-import { Locator, Page, test } from "@playwright/test";
+import { Locator, Page} from "@playwright/test";
 import Actions from "../../helper/actions";
 
 export class Common {
@@ -13,6 +13,7 @@ export class Common {
     h1Text: (value: any) => any;
     pageTitle: Locator;
     textarea: Locator;
+    successMessage: Locator;
 
     constructor(public page: Page){
         this.actions = new Actions(this.page);
@@ -26,6 +27,7 @@ export class Common {
         this.h1Text = (text) => this.page.locator(`//h1[text()="${text}"]`);
         this.pageTitle = this.page.locator(`//h1[contains(@class,"font-bold")]`);
         this.textarea = this.page.locator(`//textarea`);
+        this.successMessage = this.page.locator(`(//div[@role="alert"]/div)[2]`);
     }
 
     /**
@@ -33,10 +35,8 @@ export class Common {
      * @param {string} url
     */
     async launchUrl(url: string) {
-        await test.step("Launch the Playground website", async () => {
-            await this.page.goto(url);
-            await this.actions.waitForPageToLoad();
-        });
+        await this.page.goto(url);
+        await this.actions.waitForPageToLoad();
     }
 
     /**
