@@ -55,7 +55,7 @@ class ShopPage extends Common {
      * @param {Array} products
      * @returns true if name and price of product matches
     */
-    async verifyProductNameAndPrice(products: { [key: string]: string }[]) {
+    async verifyProductNameAndPrice(products: Array<{ [productName: string]: string }>) {
         let allMatch = true;
         let index = 0;
         for (const obj of products) {

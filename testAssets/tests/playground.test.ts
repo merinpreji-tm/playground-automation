@@ -38,7 +38,9 @@ test.describe("Test the Playground web application", async () => {
     });
 
     await test.step(`Verify the name and price of the products listed`, async () => {
-      const areProductDetailsCorrect = await shopPage.verifyProductNameAndPrice(playgroundData.products);
+      type Product = { [productName: string]: string };
+      const products: Product[] = playgroundData.products as Product[];
+      const areProductDetailsCorrect = await shopPage.verifyProductNameAndPrice(products);
       expect(areProductDetailsCorrect, "Product names and prices should match").toBe(true);
     });
 
@@ -646,7 +648,7 @@ test.describe("Test the Playground web application", async () => {
     });
   });
 
-  test.skip("TC20 - Verify if the user is able to add the product to the cart which is in wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
+  test("TC20 - Verify if the user is able to add the product to the cart which is in wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
     await test.step(`Navigate to '${playgroundData.navigationMenu.shop}' page using menu option`, async () => {
       await homePage.clickNavigationMenu(playgroundData.navigationMenu.shop);
       const isShopVisible = await shopPage.verifyMenuIsVisible();
