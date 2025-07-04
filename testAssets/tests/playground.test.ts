@@ -701,7 +701,7 @@ test.describe("Test the Playground web application", async () => {
     });
   });
 
-  test.skip("TC21 - Verify if the user can reset the wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
+  test("TC21 - Verify if the user can reset the wishlist", async ({ common, homePage, shopPage, productDetailsPage }) => {
     await test.step(`Navigate to '${playgroundData.navigationMenu.shop}' page using menu option`, async () => {
       await homePage.clickNavigationMenu(playgroundData.navigationMenu.shop);
       const isShopVisible = await shopPage.verifyMenuIsVisible();
