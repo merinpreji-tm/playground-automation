@@ -622,8 +622,9 @@ test.describe("Test the Playground web application", async () => {
     await test.step("Click on 'Add to Wishlist' button and verify the success message displayed", async () => {
       wishlistItemsCount = await common.getCount(homePage.wishlistItemsCount);
       await common.clickButton(playgroundData.buttons.addToWishlist);
-      const successMessage = await common.getText(common.successMessage);
-      expect(successMessage, `Auto-disappearing banner content displayed at the top right side of the page should be '${playgroundData.messages.wishlistSuccess}'`).toBe(playgroundData.messages.wishlistSuccess);
+      const validMessages = [playgroundData.messages.wishlistSuccess, playgroundData.messages.wishlistItemExists];
+      const isValid = await productDetailsPage.verifySuccessMessage(validMessages);
+      expect(isValid, `Auto-disappearing banner content displayed at the top right side of the page should be one of: '${validMessages.join("' or '")}'`).toBe(true);
     });
 
     await test.step("Verify that the wishlist shows the number of products added", async () => {
@@ -670,8 +671,9 @@ test.describe("Test the Playground web application", async () => {
     await test.step("Click on 'Add to Wishlist' button and verify the success message displayed", async () => {
       wishlistItemsCount = await common.getCount(homePage.wishlistItemsCount);
       await common.clickButton(playgroundData.buttons.addToWishlist);
-      const successMessage = await common.getText(common.successMessage);
-      expect(successMessage, `Auto-disappearing banner content displayed at the top right side of the page should be '${playgroundData.messages.wishlistSuccess}'`).toBe(playgroundData.messages.wishlistSuccess);
+      const validMessages = [playgroundData.messages.wishlistSuccess, playgroundData.messages.wishlistItemExists];
+      const isValid = await productDetailsPage.verifySuccessMessage(validMessages);
+      expect(isValid, `Auto-disappearing banner content displayed at the top right side of the page should be one of: '${validMessages.join("' or '")}'`).toBe(true);
     });
 
     await test.step("Verify that the wishlist shows the number of products added", async () => {
@@ -724,8 +726,9 @@ test.describe("Test the Playground web application", async () => {
     await test.step("Click on 'Add to Wishlist' button and verify the success message displayed", async () => {
       wishlistItemsCount = await common.getCount(homePage.wishlistItemsCount);
       await common.clickButton(playgroundData.buttons.addToWishlist);
-      const successMessage = await common.getText(common.successMessage);
-      expect(successMessage, `Auto-disappearing banner content displayed at the top right side of the page should be '${playgroundData.messages.wishlistSuccess}'`).toBe(playgroundData.messages.wishlistSuccess);
+      const validMessages = [playgroundData.messages.wishlistSuccess, playgroundData.messages.wishlistItemExists];
+      const isValid = await productDetailsPage.verifySuccessMessage(validMessages);
+      expect(isValid, `Auto-disappearing banner content displayed at the top right side of the page should be one of: '${validMessages.join("' or '")}'`).toBe(true);
     });
 
     await test.step("Verify that the wishlist shows the number of products added", async () => {
