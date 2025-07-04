@@ -38,7 +38,9 @@ test.describe("Test the Playground web application", async () => {
     });
 
     await test.step(`Verify the name and price of the products listed`, async () => {
-      const areProductDetailsCorrect = await shopPage.verifyProductNameAndPrice(playgroundData.products);
+      type Product = { [productName: string]: string };
+      const products: Product[] = playgroundData.products as Product[];
+      const areProductDetailsCorrect = await shopPage.verifyProductNameAndPrice(products);
       expect(areProductDetailsCorrect, "Product names and prices should match").toBe(true);
     });
 
