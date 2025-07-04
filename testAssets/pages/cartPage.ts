@@ -1,4 +1,4 @@
-import { Locator, Page, test, expect } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 import { Common } from "./common";
 import * as env from "../test-data/env-test.json";
 
@@ -20,16 +20,20 @@ class CartPage extends Common {
         this.productTitles = this.page.locator(`//h1[@class="font-titleFont font-semibold"]`);
     }
 
+    /**
+     * Method to click + button
+     * @param productName 
+     */
     async clickPlusButton(productName: string) {
-        await test.step("Click on '+' button", async () => {
-            await this.actions.clickButton(this.plusButton(productName), "+");
-        });
+        await this.actions.clickButton(this.plusButton(productName), "+");
     }
 
+    /**
+     * Method to click - button
+     * @param productName 
+     */
     async clickMinusButton(productName: string) {
-        await test.step("Click on '-' button", async () => {
-            await this.actions.clickButton(this.minusButton(productName), "-");
-        });
+        await this.actions.clickButton(this.minusButton(productName), "-");
     }
 
     /**
@@ -42,12 +46,15 @@ class CartPage extends Common {
         return parseInt(productQuantity);
     }
 
+    /**
+     * Method to get the price of a product
+     * @param productName 
+     * @returns price as number
+     */
     async getProductPrice(productName: string){
-        return await test.step(`Get the price of the product ${productName}`, async () => {
-            const priceText = await this.price(productName).innerText();
-            const productPrice = parseFloat(priceText.replace(/[^\d.]/g, ""));
-            return productPrice;
-        });
+        const priceText = await this.price(productName).innerText();
+        const productPrice = parseFloat(priceText.replace(/[^\d.]/g, ""));
+        return productPrice;
     }
 
     /**

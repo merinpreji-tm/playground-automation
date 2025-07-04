@@ -5,10 +5,9 @@ import ShopPage from "../pages/shopPage";
 import ComponentsPage from "../pages/componentsPage";
 import ProductDetailsPage from "../pages/productDetailsPage";
 import CartPage from "../pages/cartPage";
-// import ContactPage from "../pages/contactPage";
-// import PaymentPage from "../pages/PaymentPage";
-// import ProfilePage from "../pages/profilePage";
-// import SignUpPage from "../pages/signUpPage";
+import ContactPage from "../pages/contactPage";
+import PaymentPage from "../pages/paymentPage";
+import ProfilePage from "../pages/profilePage";
 
 type CustomFixture = {
     page: Page;
@@ -18,10 +17,9 @@ type CustomFixture = {
     componentsPage: ComponentsPage;
     productDetailsPage: ProductDetailsPage;
     cartPage: CartPage;
-    // contactPage: ContactPage;
-    // paymentPage: PaymentPage;
-    // profilePage: ProfilePage;
-    // signUpPage: SignUpPage;
+    contactPage: ContactPage;
+    paymentPage: PaymentPage;
+    profilePage: ProfilePage;
 }
 
 export const test = base.extend <CustomFixture> ({
@@ -49,22 +47,18 @@ export const test = base.extend <CustomFixture> ({
         const cartPage = new CartPage(page);
         await use(cartPage);
     },
-    // contactPage: async ({ page }, use) => {
-    //     const contactPage = new ContactPage(page);
-    //     await use(contactPage);
-    // },
-    // paymentPage: async ({ page }, use) => {
-    //     const paymentPage = new PaymentPage(page);
-    //     await use(paymentPage);
-    // },
-    // profilePage: async ({ page }, use) => {
-    //     const profilePage = new ProfilePage(page);
-    //     await use(profilePage);
-    // },
-    // signUpPage: async ({ page }, use) => {
-    //     const signUpPage = new SignUpPage(page);
-    //     await use(signUpPage);
-    // }
+    contactPage: async ({ page }, use) => {
+        const contactPage = new ContactPage(page);
+        await use(contactPage);
+    },
+    paymentPage: async ({ page }, use) => {
+        const paymentPage = new PaymentPage(page);
+        await use(paymentPage);
+    },
+    profilePage: async ({ page }, use) => {
+        const profilePage = new ProfilePage(page);
+        await use(profilePage);
+    },
 });
 
 export { expect };

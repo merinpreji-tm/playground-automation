@@ -1,4 +1,4 @@
-import { Locator, Page, test, expect } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 import { Common } from "./common";
 import * as env from "../test-data/env-test.json";
 
@@ -77,6 +77,22 @@ class HomePage extends Common {
         await this.clickButton(text);
         console.log("Logged in successfully");
         await this.actions.waitForElementToBeDisappear(this.ptagText("Login to your account"));
+    };
+
+    /**
+     * Method to log out from playground application
+     * @param option 
+     * @param alertText 
+     */
+    async logOut(option: string, alertText: string) {
+        await this.clickProfileIcon();
+        this.page.once("dialog", async (dialog) => {
+            const alertMessage = dialog.message();
+            expect(alertMessage).toBe(alertText);
+            await dialog.accept();
+        });
+        await this.actions.clickOn(this.liText(option), `${option}`);
+        console.log("Logged out successfully");
     };
 
     /**
@@ -170,5 +186,21 @@ class HomePage extends Common {
     async goToCart(){
         await this.actions.clickOn(this.cartIcon, "Cart Icon");
     }
+
+    /**
+     * Method to navigate to wishlist
+     */
+    async goToWishlist(){
+        await this.actions.clickOn(this.wishlistIcon, "Wishlist Icon");
+    }
+
+    /**
+     * Method to navigate to Profile, My Orders, Sign Up
+     * @param text 
+     */
+    async goTo(text: string) {
+        await this.clickProfileIcon();
+        await this.actions.clickOn(this.liText(text), `${text}`);
+    };
 }
 export default HomePage;
