@@ -80,6 +80,22 @@ class HomePage extends Common {
     };
 
     /**
+     * Method to log out from playground application
+     * @param option 
+     * @param alertText 
+     */
+    async logOut(option: string, alertText: string) {
+        await this.clickProfileIcon();
+        this.page.once("dialog", async (dialog) => {
+            const alertMessage = dialog.message();
+            expect(alertMessage).toBe(alertText);
+            await dialog.accept();
+        });
+        await this.actions.clickOn(this.liText(option), `${option}`);
+        console.log("Logged out successfully");
+    };
+
+    /**
      * Method to launch and login to the application
      * @param {string} url
      * @param {string} email

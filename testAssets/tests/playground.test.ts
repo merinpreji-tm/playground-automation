@@ -16,6 +16,7 @@ test.describe("Test the Playground web application", async () => {
   let laptopQuantity = 0;
   let mobileQuantity = 0;
   let sumOfPrices = 0;
+
   test.beforeEach(async ({ page, common, homePage }) => {
     await test.step("Launch the website and verify that home page is displayed", async () => {
       await common.launchUrl(env.baseUrl);
@@ -762,6 +763,14 @@ test.describe("Test the Playground web application", async () => {
       await profilePage.editProfile(playgroundData.contact.name, playgroundData.gender.female, playgroundData.country.us, playgroundData.contact.bio, playgroundData.buttons.save);
       const successMessage = await productDetailsPage.getSuccessMessage();
       expect(successMessage, `Auto-disappearing banner content displayed at the top right side of the page should be '${playgroundData.messages.success}'`).toBe(playgroundData.messages.success);
+    });
+  });
+
+  test("TC23 - Verify user is able to logout", async ({ homePage, productDetailsPage }) => {
+    await test.step(`Click on profile icon > Click on ${playgroundData.texts.logout} > Verify the success message displayed`, async () => {
+      await homePage.logOut(playgroundData.texts.logout, playgroundData.messages.logoutAlert);
+      const successMessage = await productDetailsPage.getSuccessMessage();
+      expect(successMessage, `Auto-disappearing banner content displayed at the top right side of the page should be '${playgroundData.messages.logoutSuccess}'`).toBe(playgroundData.messages.logoutSuccess);
     });
   });
 
