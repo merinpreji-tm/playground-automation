@@ -30,10 +30,17 @@ on:
           - webkit
           - Google Chrome
           - Microsoft Edge
+      parallelCount:
+        description: 'How many times to run the same test file in parallel'
+        required: true
+        default: '1'
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        instance: ${{ fromJson('[' + join(',', range(1, fromJson(github.event.inputs.parallelCount))) + ']') }}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -47,17 +54,17 @@ jobs:
       run: |
           echo email=${{ github.event.inputs.email }} >> .env
           echo password=${{ github.event.inputs.password }} >> .env
-    - name: Run Playwright tests
+    - name: Run Playwright tests (instance ${{ matrix.instance }})
       run: |
           if [ "${{ github.event.inputs.testFile }}" = "all" ]; then
-            npx playwright test --project="${{ github.event.inputs.browser }}"
+            npx playwright test --project="${{ github.event.inputs.browser }}" --reporter=html --output=playwright-report-${{ matrix.instance }}
           else
-            npx playwright test "${{ github.event.inputs.testFile }}" --project="${{ github.event.inputs.browser }}"
+            npx playwright test "${{ github.event.inputs.testFile }}" --project="${{ github.event.inputs.browser }}" --reporter=html --output=playwright-report-${{ matrix.instance }}
           fi
-    - name: Upload HTML Report
+    - name: Upload HTML Report ${{ matrix.instance }}
       uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: playwright-report
-        path: playwright-report/
+        name: report-${{ matrix.instance }}
+        path: playground-report-${{ matrix.instance }}
         retention-days: 30
