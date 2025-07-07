@@ -34,41 +34,38 @@ on:
         description: 'How many times to run the same test file in parallel'
         required: true
         default: '1'
+
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        instance: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        instance: ${{ fromJson(format('[{0}]', join(',', range(1, fromJson(inputs.parallelCount) + 1)))) }}
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Create .env file from workflow inputs
-      run: |
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Create .env file from workflow inputs
+        run: |
           echo email=${{ github.event.inputs.email }} >> .env
           echo password=${{ github.event.inputs.password }} >> .env
-    - name: Skip instances greater than parallelCount
-      if: ${{ matrix.instance > fromJson(github.event.inputs.parallelCount) }}
-      run: echo "Skipping instance ${{ matrix.instance }} — above parallelCount"
-    - name: Run Playwright tests (instance ${{ matrix.instance }})
-      if: ${{ matrix.instance <= fromJson(github.event.inputs.parallelCount) }}
-      run: |
+      - name: Run Playwright tests (instance ${{ matrix.instance }})
+        run: |
           if [ "${{ github.event.inputs.testFile }}" = "all" ]; then
             npx playwright test --project="${{ github.event.inputs.browser }}" --reporter=html --output=playwright-report-${{ matrix.instance }}
           else
             npx playwright test "${{ github.event.inputs.testFile }}" --project="${{ github.event.inputs.browser }}" --reporter=html --output=playwright-report-${{ matrix.instance }}
           fi
-    - name: Upload HTML Report ${{ matrix.instance }}
-      if: ${{ matrix.instance <= fromJson(github.event.inputs.parallelCount) && !cancelled() }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: report-${{ matrix.instance }}
-        path: playwright-report-${{ matrix.instance }}
-        retention-days: 30
+      - name: Upload HTML Report ${{ matrix.instance }}
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-${{ matrix.instance }}
+          path: playwright-report-${{ matrix.instance }}
+          retention-days: 30
