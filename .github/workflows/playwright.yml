@@ -54,6 +54,9 @@ jobs:
       run: |
           echo email=${{ github.event.inputs.email }} >> .env
           echo password=${{ github.event.inputs.password }} >> .env
+    - name: Skip instances greater than parallelCount
+      if: ${{ matrix.instance > fromJson(github.event.inputs.parallelCount) }}
+      run: echo "Skipping instance ${{ matrix.instance }} — above parallelCount"
     - name: Run Playwright tests (instance ${{ matrix.instance }})
       if: ${{ matrix.instance <= fromJson(github.event.inputs.parallelCount) }}
       run: |
