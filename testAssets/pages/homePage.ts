@@ -138,7 +138,6 @@ class HomePage extends Common {
         return productTitle;
     }
 
-
     /**
      * Method to check whether cart/wishlist count has increased
      * @param previousCount 

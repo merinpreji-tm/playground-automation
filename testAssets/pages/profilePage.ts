@@ -20,7 +20,7 @@ class ProfilePage extends Common {
     /**
      * Method to check whether gender is selected
      * @param option 
-     * @returns 
+     * @returns true if the specified option is selected; otherwise, false
      */
     async isGenderSelected(option: string) {
         const selectedOption = await this.genderDropdown.inputValue();
@@ -28,7 +28,7 @@ class ProfilePage extends Common {
     }
 
     /**
-     * Method to select a particular gender
+     * Method to select specified gender
      * @param gender 
      */
     async selectGender(gender: string) {
