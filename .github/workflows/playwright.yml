@@ -8,6 +8,26 @@ on:
       password:
         description: 'Enter Password'
         required: true
+      testFile:
+      description: 'Select test file to run'
+      required: true
+      default: 'all'
+      type: choice
+      options:
+        - all
+        - tests/playground.test.ts
+        - tests/cart.test.ts
+        - tests/e2e.test.ts
+        - tests/wishlist.test.ts
+      browser:
+        description: 'Select browser'
+        required: true
+        default: 'chromium'
+        type: choice
+        options:
+          - chromium
+          - firefox
+          - webkit
 jobs:
   test:
     timeout-minutes: 60
@@ -26,7 +46,12 @@ jobs:
           echo email=${{ github.event.inputs.email }} >> .env
           echo password=${{ github.event.inputs.password }} >> .env
     - name: Run Playwright tests
-      run: npx playwright test
+      run: |
+          if [ "${{ github.event.inputs.testFile }}" = "all" ]; then
+            npx playwright test --project=${{ github.event.inputs.browser }}
+          else
+            npx playwright test ${{ github.event.inputs.testFile }} --project=${{ github.event.inputs.browser }}
+          fi
     - name: Upload HTML Report
       uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
