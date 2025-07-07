@@ -55,10 +55,10 @@ jobs:
           echo email=${{ github.event.inputs.email }} >> .env
           echo password=${{ github.event.inputs.password }} >> .env
     - name: Skip instances greater than parallelCount
-      if: ${{ matrix.instance > (github.event.inputs.parallelCount | fromJSON) }}
+      if: ${{ matrix.instance > fromJson(github.event.inputs.parallelCount) }}
       run: echo "Skipping instance ${{ matrix.instance }} — above parallelCount"
     - name: Run Playwright tests (instance ${{ matrix.instance }})
-      if: ${{ matrix.instance <= (github.event.inputs.parallelCount | fromJSON) }}
+      if: ${{ matrix.instance <= fromJson(github.event.inputs.parallelCount) }}
       run: |
           if [ "${{ github.event.inputs.testFile }}" = "all" ]; then
             npx playwright test --project="${{ github.event.inputs.browser }}" --reporter=html --output=playwright-report-${{ matrix.instance }}
@@ -66,7 +66,7 @@ jobs:
             npx playwright test "${{ github.event.inputs.testFile }}" --project="${{ github.event.inputs.browser }}" --reporter=html --output=playwright-report-${{ matrix.instance }}
           fi
     - name: Upload HTML Report ${{ matrix.instance }}
-      if: ${{ matrix.instance <= (github.event.inputs.parallelCount | fromJSON) && !cancelled() }}
+      if: ${{ matrix.instance <= fromJson(github.event.inputs.parallelCount) && !cancelled() }}
       uses: actions/upload-artifact@v4
       with:
         name: report-${{ matrix.instance }}
