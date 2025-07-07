@@ -69,11 +69,13 @@ jobs:
           echo email=${{ github.event.inputs.email }} >> .env
           echo password=${{ github.event.inputs.password }} >> .env
       - name: Run Playwright tests (instance ${{ matrix.instance }})
+        env:
+          REPORT_ID: ${{ matrix.instance }}
         run: |
           if [ "${{ github.event.inputs.testFile }}" = "all" ]; then
-            npx playwright test --project="${{ github.event.inputs.browser }}" --reporter=html --output=playwright-report-${{ matrix.instance }}
+            npx playwright test --project="${{ github.event.inputs.browser }}"
           else
-            npx playwright test "${{ github.event.inputs.testFile }}" --project="${{ github.event.inputs.browser }}" --reporter=html --output=playwright-report-${{ matrix.instance }}
+            npx playwright test "${{ github.event.inputs.testFile }}" --project="${{ github.event.inputs.browser }}"
           fi
       - name: Upload HTML Report ${{ matrix.instance }}
         if: ${{ !cancelled() }}
@@ -82,3 +84,23 @@ jobs:
           name: report-${{ matrix.instance }}
           path: playwright-report-${{ matrix.instance }}
           retention-days: 30
+
+  zip-reports:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all report artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-reports
+
+      - name: Zip all reports
+        run: |
+          cd all-reports
+          zip -r combined-playwright-reports.zip ./*
+
+      - name: Upload combined zipped reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: combined-playwright-reports
+          path: all-reports/combined-playwright-reports.zip
