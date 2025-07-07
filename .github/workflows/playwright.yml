@@ -9,16 +9,16 @@ on:
         description: 'Enter Password'
         required: true
       testFile:
-      description: 'Select test file to run'
-      required: true
-      default: 'all'
-      type: choice
-      options:
-        - all
-        - tests/playground.test.ts
-        - tests/cart.test.ts
-        - tests/e2e.test.ts
-        - tests/wishlist.test.ts
+        description: 'Select test file to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - tests/playground.test.ts
+          - tests/cart.test.ts
+          - tests/e2e.test.ts
+          - tests/wishlist.test.ts
       browser:
         description: 'Select browser'
         required: true
