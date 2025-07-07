@@ -49,11 +49,11 @@ jobs:
           echo password=${{ github.event.inputs.password }} >> .env
     - name: Run Playwright tests
       run: |
-        if [ "${{ github.event.inputs.testFile }}" = "all" ]; then
-          npx playwright test --project="${{ github.event.inputs.browser }}"
-        else
-          npx playwright test "${{ github.event.inputs.testFile }}" --project="${{ github.event.inputs.browser }}"
-        fi
+          if [ "${{ github.event.inputs.testFile }}" = "all" ]; then
+            npx playwright test --project="${{ github.event.inputs.browser }}"
+          else
+            npx playwright test "${{ github.event.inputs.testFile }}" --project="${{ github.event.inputs.browser }}"
+          fi
     - name: Upload HTML Report
       uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
