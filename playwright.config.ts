@@ -8,6 +8,8 @@ import dotenv from 'dotenv';
 import path from 'path';
 dotenv.config({ path: path.resolve(__dirname, 'env', '.env.test') });
 
+// Read report ID from env for dynamic report folders
+const REPORT_ID = process.env.REPORT_ID || 'default';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -23,7 +25,8 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  // reporter: 'html',
+  reporter: [['html', { outputFolder: `playwright-report-${REPORT_ID}` }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   // use: {
   //   /* Base URL to use in actions like `await page.goto('/')`. */
