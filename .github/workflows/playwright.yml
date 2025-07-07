@@ -28,8 +28,8 @@ on:
           - chromium
           - firefox
           - webkit
-          - chrome
-          - edge
+          - Google Chrome
+          - Microsoft Edge
 jobs:
   test:
     timeout-minutes: 60
