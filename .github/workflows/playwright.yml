@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        instance: ${{ fromJson('[' + join(',', range(1, fromJson(github.event.inputs.parallelCount))) + ']') }}
+        instance: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -55,6 +55,7 @@ jobs:
           echo email=${{ github.event.inputs.email }} >> .env
           echo password=${{ github.event.inputs.password }} >> .env
     - name: Run Playwright tests (instance ${{ matrix.instance }})
+      if: ${{ matrix.instance <= fromJson(github.event.inputs.parallelCount) }}
       run: |
           if [ "${{ github.event.inputs.testFile }}" = "all" ]; then
             npx playwright test --project="${{ github.event.inputs.browser }}" --reporter=html --output=playwright-report-${{ matrix.instance }}
@@ -62,9 +63,9 @@ jobs:
             npx playwright test "${{ github.event.inputs.testFile }}" --project="${{ github.event.inputs.browser }}" --reporter=html --output=playwright-report-${{ matrix.instance }}
           fi
     - name: Upload HTML Report ${{ matrix.instance }}
+      if: ${{ matrix.instance <= fromJson(github.event.inputs.parallelCount) && !cancelled() }}
       uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
       with:
         name: report-${{ matrix.instance }}
-        path: playground-report-${{ matrix.instance }}
+        path: playwright-report-${{ matrix.instance }}
         retention-days: 30
