@@ -41,7 +41,7 @@ export class Common {
 
     /**
      * Method to click a button
-     * @param {string}
+     * @param {string} text
     */
     async clickButton(text: string) {
         await this.actions.clickButton(this.button(text), `${text}`);
@@ -67,7 +67,7 @@ export class Common {
 
     /**
      * Method to get number inside a locator
-     * @param locator 
+     * @param {Locator} locator 
      * @returns text inside the locator as integer
      */
     async getCount(locator: Locator){

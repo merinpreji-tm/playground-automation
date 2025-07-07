@@ -21,7 +21,7 @@ class ComponentsPage extends Common {
 
     /**
      * Method to verify that 'Open Pop Window' button is displayed
-     * @param text 
+     * @param text
      * @returns 
      */
     async isOpenPopWindowButtonVisible(text: string) {

@@ -49,7 +49,7 @@ class CartPage extends Common {
     /**
      * Method to get the price of a product
      * @param productName 
-     * @returns price as number
+     * @returns price price of the product as a number (float)
      */
     async getProductPrice(productName: string){
         const priceText = await this.price(productName).innerText();
