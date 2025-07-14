@@ -73,9 +73,9 @@ jobs:
           REPORT_ID: ${{ matrix.instance }}
         run: |
           if [ "${{ github.event.inputs.testFile }}" = "all" ]; then
-            npx playwright test --project="${{ github.event.inputs.browser }}"
+            npx playwright test --project="${{ github.event.inputs.browser }}" --reporter=html --output=playwright-report-${{ matrix.instance }}
           else
-            npx playwright test "${{ github.event.inputs.testFile }}" --project="${{ github.event.inputs.browser }}"
+            npx playwright test "${{ github.event.inputs.testFile }}" --project="${{ github.event.inputs.browser }}" --reporter=html --output=playwright-report-${{ matrix.instance }}
           fi
       - name: Upload HTML Report ${{ matrix.instance }}
         if: ${{ !cancelled() }}
@@ -85,7 +85,7 @@ jobs:
           path: playwright-report-${{ matrix.instance }}
           retention-days: 30
 
-  zip-reports:
+  best-report:
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -94,13 +94,38 @@ jobs:
         with:
           path: all-reports
 
-      - name: Zip all reports
+      - name: Pick best report (highest pass rate)
         run: |
-          cd all-reports
-          zip -r combined-playwright-reports.zip ./*
+          mkdir -p testArtifacts
+          best_folder=""
+          best_pass=0
 
-      - name: Upload combined zipped reports
+          for folder in all-reports/*; do
+            json_file="$folder/.last-run.json"
+            if [ -f "$json_file" ]; then
+              passed=$(jq '[.suites[].specs[] | select(.ok==true)] | length' "$json_file")
+              total=$(jq '[.suites[].specs[]] | length' "$json_file")
+              if [ "$total" -gt 0 ]; then
+                percent=$((100 * passed / total))
+                echo "$folder: $percent%"
+                if [ "$percent" -gt "$best_pass" ]; then
+                  best_pass=$percent
+                  best_folder=$folder
+                fi
+              fi
+            fi
+          done
+
+          if [ -n "$best_folder" ]; then
+            cp -r "$best_folder"/* testArtifacts/
+            echo "Best report copied from $best_folder (pass rate: $best_pass%)"
+          else
+            echo \"No valid reports found\"
+          fi
+
+      - name: Upload Best HTML Report
         uses: actions/upload-artifact@v4
         with:
-          name: combined-playwright-reports
-          path: all-reports/combined-playwright-reports.zip
+          name: best-playwright-report
+          path: testArtifacts
+          retention-days: 30
