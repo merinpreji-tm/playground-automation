@@ -4,21 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "parallel-test": "node parallelRunner.js testAssets/tests/sample.test.ts chrome 2 --config=playwright.allure.config.ts",
-    "allure-generate": "allure generate allure-results --clean -o allure-report",
-    "allure-open": "allure open allure-report"
+    "parallel-test": "node parallelRunner.js testAssets/tests/wishlist.test.ts chrome 2 --config=playwright.allure.config.ts",
+    "parallel-tests": "npx playwright test testAssets/tests/wishlist.test.ts testAssets/tests/e2e.test.ts testAssets/tests/playground.test.ts --config=playwright.allure.config.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@playwright/test": "^1.54.0",
+    "@playwright/test": "^1.54.1",
     "@types/node": "^24.0.13",
     "allure-commandline": "^2.34.1",
-    "allure-playwright": "^3.3.0"
+    "allure-js-commons": "^2.0.0-beta.16",
+    "allure-playwright": "^3.3.2"
   },
   "dependencies": {
-    "dotenv": "^17.2.0"
+    "dotenv": "^17.2.0",
+    "exceljs": "^4.4.0"
   }
 }
