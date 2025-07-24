@@ -25,7 +25,9 @@ export default defineConfig({
   // reporter: 'html',
   reporter: [
     ['html', { open: 'never' }],
-    ["allure-playwright", { resultsDir: "testArtifacts/allure-results", detail: false, }],
+    // ["allure-playwright", { resultsDir: "testArtifacts/allure-results", detail: false, }],
+    ['./reporters/jsonReporter.ts'],
+    ['./reporters/customReporter.ts']
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   // use: {

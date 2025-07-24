@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "parallel-test": "node parallelRunner.js testAssets/tests/wishlist.test.ts chrome 2 --config=playwright.allure.config.ts",
-    "parallel-tests": "npx playwright test testAssets/tests/wishlist.test.ts testAssets/tests/e2e.test.ts testAssets/tests/playground.test.ts --config=playwright.allure.config.ts"
+    "parallel-repeated-test": "npx playwright test wishlist.test.ts --config=playwright-repeated-allure.config.ts --repeat-each=2 --workers=2 --project=chrome",
+    "parallel-tests": "npx playwright test wishlist.test.ts e2e.test.ts playground.test.ts"
   },
   "keywords": [],
   "author": "",

@@ -1,5 +1,7 @@
 import type { FullConfig, FullResult, Reporter, Suite, TestCase, TestResult } from '@playwright/test/reporter';
 import { AllureRuntime, AllureGroup, AllureTest, Status, Stage } from 'allure-js-commons';
+import JSONToExcelConverter from './jsonConverter';
+import JSONToCsvConverter from './csvReporter';
 import { execSync } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -15,12 +17,16 @@ class AllureReporter implements Reporter {
 
   onBegin(config: FullConfig, suite: Suite) {
     console.log(`Starting the run with ${suite.allTests().length} tests`);
-    // Clean up testArtifacts directory
     if (fs.existsSync(ARTIFACTS_DIR)) {
       fs.rmSync(ARTIFACTS_DIR, { recursive: true, force: true });
     }
     fs.mkdirSync(ARTIFACTS_DIR, { recursive: true });
-    console.log(`Starting run with ${suite.allTests().length} tests.`);
+    const subDirs = ['json-reports', 'excel-reports', 'csv-reports'];
+    for (const dir of subDirs) {
+      const fullPath = path.join(ARTIFACTS_DIR, dir);
+      fs.mkdirSync(fullPath, { recursive: true });
+    }
+
     // Count number of tests per spec file
     for (const test of suite.allTests()) {
       const filePath = test.location.file;
@@ -61,6 +67,7 @@ class AllureReporter implements Reporter {
     const fileName = path.basename(filePath).split('.')[0];
     const resultDir = path.join(ARTIFACTS_DIR, `allure-results-${fileName}`);
     const reportDir = path.join(ARTIFACTS_DIR, `allure-report-${fileName}`);
+    const jsonFolderPath = path.join(ARTIFACTS_DIR, 'json-reports');
 
     // Finalize the test in Allure
     const allureTest = this.allureTests.get(test.id);
@@ -97,14 +104,30 @@ class AllureReporter implements Reporter {
 
     // If all tests in this file are done, generate the report
     if (completed === this.specTestCount.get(filePath)) {
-      console.log(`Generating Allure report for ${fileName}`);
       try {
         execSync(`npx allure generate ${resultDir} --clean -o ${reportDir}`, {
           stdio: 'inherit',
         });
-        console.log(`Allure report generated: ${reportDir}`); 
       } catch (err) {
         console.error(`Failed to generate Allure report for ${fileName}`, err);
+      }
+
+      // Generate Excel report
+      try {
+        const excelOutputPath = path.join(ARTIFACTS_DIR, `excel-reports`, `excel-report-${fileName}.xlsx`);
+        const converter = new JSONToExcelConverter(excelOutputPath);
+        converter.convertJSONFolderToExcel(jsonFolderPath);
+      } catch (err) {
+        console.error(`Failed to generate Excel report for ${fileName}`, err);
+      }
+
+      // Generate CSV report
+      try {
+        const csvOutputPath = path.join(ARTIFACTS_DIR, `csv-reports`, `csv-report-${fileName}.csv`);
+        const converter = new JSONToCsvConverter(csvOutputPath);
+        converter.convertJSONFolderToCsv(jsonFolderPath);
+      } catch (err) {
+        console.error(`Failed to generate Csv report for ${fileName}`, err);
       }
     }
   }
