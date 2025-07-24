@@ -1,17 +1,25 @@
 {
-  "name": "playground",
+  "name": "playground-automation",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "parallel-repeated-test": "npx playwright test wishlist.test.ts --config=playwright-repeated-allure.config.ts --repeat-each=2 --workers=2 --project=chrome",
+    "parallel-tests": "npx playwright test wishlist.test.ts e2e.test.ts playground.test.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "type": "commonjs",
   "devDependencies": {
-    "@playwright/test": "^1.53.2",
-    "@types/node": "^24.0.1"
+    "@playwright/test": "^1.54.1",
+    "@types/node": "^24.0.13",
+    "allure-commandline": "^2.34.1",
+    "allure-js-commons": "^2.0.0-beta.16",
+    "allure-playwright": "^3.3.2"
   },
   "dependencies": {
-    "dotenv": "^16.5.0"
+    "dotenv": "^17.2.0",
+    "exceljs": "^4.4.0"
   }
 }

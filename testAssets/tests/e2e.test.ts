@@ -5,7 +5,7 @@ import * as env from "../test-data/env-test.json";
 test.describe("Test the Playground web application", async () => {
   let cartItemsCount = 0;
   let mobileTitle = "";
-  
+
   test.beforeEach(async ({ page, common, homePage }) => {
     await test.step("Launch the website and verify that home page is displayed", async () => {
       await common.launchUrl(env.baseUrl);
