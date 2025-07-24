@@ -1,4 +1,4 @@
-name: Playground Tests
+name: Playground Tests (Parallel-Repeated)
 on:
   workflow_dispatch:
     inputs:
@@ -14,7 +14,6 @@ on:
         default: 'all'
         type: choice
         options:
-          - all
           - tests/playground.test.ts
           - tests/cart.test.ts
           - tests/e2e.test.ts
@@ -30,13 +29,17 @@ on:
           - webkit
           - Google Chrome
           - Microsoft Edge
+      parallelCount:
+        description: 'How many times to run the same test file in parallel'
+        required: true
+        default: '1'
 jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+        uses: actions/setup-node@v4
         with:
           node-version: lts/*
       - name: Install dependencies
@@ -49,27 +52,10 @@ jobs:
           echo password=${{ github.event.inputs.password }} >> .env
       - name: Run Playwright tests
         continue-on-error: true
-        run: |
-          if [ "${{ github.event.inputs.testFile }}" = "all" ]; then
-            npx playwright test --project=${{ github.event.inputs.browser }}
-          else
-            npx playwright test ${{ github.event.inputs.testFile }} --project=${{ github.event.inputs.browser }}
-          fi
-      - name: Upload Allure report
+        run: npx playwright test ${{ github.event.inputs.testFile }} --config=playwright-repeated-allure.config.ts --repeat-each=${{ github.event.inputs.parallelCount }} --workers=${{ github.event.inputs.parallelCount }} --project=${{ github.event.inputs.browser }}
+      - name: Upload Best Allure report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report
+          name: Best allure-report
           path: testArtifacts
-      - name: Upload Excel report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: excel-report
-          path: testArtifacts/excel-reports
-      - name: Upload CSV report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: csv-report
-          path: testArtifacts/csv-reports
