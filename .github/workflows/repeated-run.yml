@@ -54,9 +54,15 @@ jobs:
       - name: Run Playwright tests
         continue-on-error: true
         run: npx playwright test ${{ github.event.inputs.testFile }} --config=playwright-repeated-allure.config.ts --repeat-each=${{ github.event.inputs.parallelCount }} --workers=${{ github.event.inputs.parallelCount }} --project=${{ github.event.inputs.browser }}
+      - name: Install Allure CLI
+        run: |
+          npm install -g allure-commandline --save-dev
+      - name: Combine Best Allure Report to Single HTML
+        run: |
+          npm run allureCombine
       - name: Upload Best Allure report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: Best allure-report
-          path: testArtifacts
+          path: testArtifacts/best-allure-report
