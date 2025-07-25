@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "parallel-repeated-test": "npx playwright test wishlist.test.ts --config=playwright-repeated-allure.config.ts --repeat-each=2 --workers=2 --project=chrome",
-    "parallel-tests": "npx playwright test wishlist.test.ts e2e.test.ts playground.test.ts"
+    "parallel-tests": "npx playwright test wishlist.test.ts e2e.test.ts playground.test.ts",
+    "allureCombine": "node ./node_modules/allure-single-html-file-js/combine.js testArtifacts/best-allure-report"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +17,8 @@
     "@types/node": "^24.0.13",
     "allure-commandline": "^2.34.1",
     "allure-js-commons": "^2.0.0-beta.16",
-    "allure-playwright": "^3.3.2"
+    "allure-playwright": "^3.3.2",
+    "allure-single-html-file-js": "^0.0.6"
   },
   "dependencies": {
     "dotenv": "^17.2.0",

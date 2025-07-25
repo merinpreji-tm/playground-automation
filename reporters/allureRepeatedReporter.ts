@@ -174,7 +174,7 @@ class AllureRepeatedReporter implements Reporter {
     reportStats.sort((a, b) => b.percentage - a.percentage);
     const best = reportStats[0];
     if (best) {
-      const dest = path.join(ARTIFACTS_DIR, path.basename(best.allureReportDir));
+      const dest = path.join(ARTIFACTS_DIR, 'best-allure-report');
       fs.rmSync(dest, { recursive: true, force: true });
       fs.cpSync(best.allureReportDir, dest, { recursive: true });
       console.log(`Moved best Allure report (${best.percentage.toFixed(2)}%) to: ${dest}`);
