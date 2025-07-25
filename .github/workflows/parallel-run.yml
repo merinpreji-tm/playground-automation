@@ -1,4 +1,4 @@
-name: Playground Tests
+name: Playground Tests (Parallel Run)
 on:
   workflow_dispatch:
     inputs:
@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
-      - uses: actions/setup-node@v4
+        uses: actions/setup-node@v4
         with:
           node-version: lts/*
       - name: Install dependencies
