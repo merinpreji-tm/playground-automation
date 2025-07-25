@@ -1,4 +1,4 @@
-name: Playground Tests
+name: Playground Tests (Parallel Run)
 on:
   workflow_dispatch:
     inputs:
