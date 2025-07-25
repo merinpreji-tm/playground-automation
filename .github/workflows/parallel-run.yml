@@ -43,7 +43,7 @@ jobs:
       - name: Run Playwright tests
         continue-on-error: true
         run: |
-          FILES=${{ github.event.inputs.testFiles }}
+          FILES="${{ github.event.inputs.testFiles }}""
           npx playwright test $FILES  --project="${{ github.event.inputs.browser }}"
       - name: Install Allure CLI
         run: |
