@@ -8,6 +8,9 @@ on:
       password:
         description: 'Enter Password'
         required: true
+      testFiles:
+        description: 'Enter the test files (space-separated)'
+        required: true
       browser:
         description: 'Select browser'
         required: true
@@ -40,7 +43,24 @@ jobs:
       - name: Run Playwright tests
         continue-on-error: true
         run: |
-          npm run parallel-tests --project="${{ github.event.inputs.browser }}"
+          FILES="${{ github.event.inputs.testFiles }}"
+          npx playwright test $FILES  --project="${{ github.event.inputs.browser }}"
+      - name: Install Allure CLI
+        run: |
+          npm install -g allure-commandline --save-dev
+      - name: Combine Allure Reports to Single HTML
+        run: |
+          FILES="${{ github.event.inputs.testFiles }}"
+          for FILE in $FILES; do
+            BASENAME=$(basename "$FILE" .test.ts)
+            REPORT_DIR="testArtifacts/allure-reports/allure-report-${BASENAME}"
+            if [ -d "$REPORT_DIR" ]; then
+              echo "Combining report from $REPORT_DIR"
+              node ./node_modules/allure-single-html-file-js/combine.js "$REPORT_DIR"
+            else
+              echo "Report directory not found: $REPORT_DIR"
+            fi
+          done
       - name: Upload Allure report
         if: always()
         uses: actions/upload-artifact@v4
