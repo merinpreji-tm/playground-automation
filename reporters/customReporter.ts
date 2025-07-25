@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const ARTIFACTS_DIR = path.join(process.cwd(), 'testArtifacts');
+const PLAYWRIGHT_REPORT_DIR = path.join(process.cwd(), 'playwright-report');
 
 class AllureReporter implements Reporter {
   private allureRuntimes: Map<string, AllureRuntime> = new Map();
@@ -17,14 +18,13 @@ class AllureReporter implements Reporter {
 
   onBegin(config: FullConfig, suite: Suite) {
     console.log(`Starting the run with ${suite.allTests().length} tests`);
-    if (fs.existsSync(ARTIFACTS_DIR)) {
-      fs.rmSync(ARTIFACTS_DIR, { recursive: true, force: true });
-    }
-    fs.mkdirSync(ARTIFACTS_DIR, { recursive: true });
-    const subDirs = ['json-reports', 'excel-reports', 'csv-reports'];
+    [PLAYWRIGHT_REPORT_DIR, ARTIFACTS_DIR].forEach(dir => {
+      fs.rmSync(dir, { recursive: true, force: true });
+      fs.mkdirSync(dir, { recursive: true });
+    });
+    const subDirs = ['allure-reports', 'json-reports', 'excel-reports', 'csv-reports'];
     for (const dir of subDirs) {
-      const fullPath = path.join(ARTIFACTS_DIR, dir);
-      fs.mkdirSync(fullPath, { recursive: true });
+      fs.mkdirSync(path.join(ARTIFACTS_DIR, dir), { recursive: true });
     }
 
     // Count number of tests per spec file
@@ -38,7 +38,7 @@ class AllureReporter implements Reporter {
     const filePath = test.location.file;
     const baseName = path.basename(filePath);
     const fileName = baseName.split('.')[0];
-    const resultDir = path.join(ARTIFACTS_DIR, `allure-results-${fileName}`);
+    const resultDir = path.join(ARTIFACTS_DIR, `allure-reports`, `allure-results-${fileName}`);
 
     // Ensure the runtime for this spec file exists
     if (!this.allureRuntimes.has(filePath)) {
@@ -65,8 +65,8 @@ class AllureReporter implements Reporter {
   onTestEnd(test: TestCase, result: TestResult) {
     const filePath = test.location.file;
     const fileName = path.basename(filePath).split('.')[0];
-    const resultDir = path.join(ARTIFACTS_DIR, `allure-results-${fileName}`);
-    const reportDir = path.join(ARTIFACTS_DIR, `allure-report-${fileName}`);
+    const resultDir = path.join(ARTIFACTS_DIR, `allure-reports`, `allure-results-${fileName}`);
+    const reportDir = path.join(ARTIFACTS_DIR, `allure-reports`, `allure-report-${fileName}`);
     const jsonFolderPath = path.join(ARTIFACTS_DIR, 'json-reports');
 
     // Finalize the test in Allure
@@ -105,9 +105,7 @@ class AllureReporter implements Reporter {
     // If all tests in this file are done, generate the report
     if (completed === this.specTestCount.get(filePath)) {
       try {
-        execSync(`npx allure generate ${resultDir} --clean -o ${reportDir}`, {
-          stdio: 'inherit',
-        });
+        execSync(`npx allure generate ${resultDir} --clean -o ${reportDir}`, { stdio: 'inherit', });
       } catch (err) {
         console.error(`Failed to generate Allure report for ${fileName}`, err);
       }

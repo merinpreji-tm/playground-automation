@@ -8,17 +8,6 @@ on:
       password:
         description: 'Enter Password'
         required: true
-      testFile:
-        description: 'Select test file to run'
-        required: true
-        default: 'all'
-        type: choice
-        options:
-          - all
-          - tests/playground.test.ts
-          - tests/cart.test.ts
-          - tests/e2e.test.ts
-          - tests/wishlist.test.ts
       browser:
         description: 'Select browser'
         required: true
@@ -51,17 +40,13 @@ jobs:
       - name: Run Playwright tests
         continue-on-error: true
         run: |
-          if [ "${{ github.event.inputs.testFile }}" = "all" ]; then
-            npx playwright test --project=${{ github.event.inputs.browser }}
-          else
-            npx playwright test ${{ github.event.inputs.testFile }} --project="${{ github.event.inputs.browser }}"
-          fi
+          npm run parallel-tests --project="${{ github.event.inputs.browser }}"
       - name: Upload Allure report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
-          path: testArtifacts
+          path: testArtifacts/allure-reports
       - name: Upload Excel report
         if: always()
         uses: actions/upload-artifact@v4

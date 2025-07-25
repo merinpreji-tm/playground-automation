@@ -118,9 +118,6 @@ class AllureRepeatedReporter implements Reporter {
         // Generate Allure HTML report
         execSync(`npx allure generate ${resultDir} --clean -o ${reportDir}`, { stdio: 'inherit' });
         console.log(`Generated: ${reportDir}`);
-        // Combine HTML report into single file
-        // execSync(`node ./node_modules/allure-single-html-file-js/combine.js ${reportDir}`, { stdio: 'inherit' });
-        // console.log(`Combined single HTML report at: ${reportDir}/complete.html`);
       } catch (err) {
         console.error(`Failed to generate report for ${reportDir}`, err);
       }

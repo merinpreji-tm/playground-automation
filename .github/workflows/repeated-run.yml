@@ -53,7 +53,7 @@ jobs:
           echo password=${{ github.event.inputs.password }} >> .env
       - name: Run Playwright tests
         continue-on-error: true
-        run: npx playwright test ${{ github.event.inputs.testFile }} --config=playwright-repeated-allure.config.ts --repeat-each=${{ github.event.inputs.parallelCount }} --workers=${{ github.event.inputs.parallelCount }} --project=${{ github.event.inputs.browser }}
+        run: npx playwright test ${{ github.event.inputs.testFile }} --config=playwright-repeated-allure.config.ts --repeat-each=${{ github.event.inputs.parallelCount }} --workers=${{ github.event.inputs.parallelCount }} --project="${{ github.event.inputs.browser }}"
       - name: Install Allure CLI
         run: |
           npm install -g allure-commandline --save-dev
