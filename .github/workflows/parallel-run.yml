@@ -40,7 +40,7 @@ jobs:
       - name: Run Playwright tests
         continue-on-error: true
         run: |
-          npm run parallel-tests --project="${{ github.event.inputs.browser }}"
+          npx playwright test wishlist.test.ts e2e.test.ts playground.test.ts --project="${{ github.event.inputs.browser }}"
       - name: Install Allure CLI
         run: |
           npm install -g allure-commandline --save-dev
