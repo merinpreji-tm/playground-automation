@@ -7,6 +7,7 @@ interface TestEntry {
   testName: string;
   status: 'PASSED' | 'FAILED' | 'UNKNOWN';
   error?: string;
+  screenshotPath?: string;
 }
 
 export default class JSONToExcelConverter {
@@ -48,7 +49,8 @@ export default class JSONToExcelConverter {
     const suiteName = this.removeSuiteSuffix(test.suiteName || 'Default Suite');
     const error = test.error || '';
     const status = test.status || 'UNKNOWN';
-    this.testResults.push({ suiteName, testName: test.testName, status, error });
+    const screenshotPath = test.screenshotPath || '';
+    this.testResults.push({ suiteName, testName: test.testName, status, error, screenshotPath });
   }
 
   private removeSuiteSuffix(suiteName: string): string {
@@ -66,7 +68,10 @@ export default class JSONToExcelConverter {
       { header: 'Test Name', key: 'testName', width: 30 },
       { header: 'Status', key: 'status', width: 15 },
       { header: 'Error', key: 'error', width: 60 },
+      { header: 'Screenshot', key: 'screenshotPath', width: 40 }
     ];
+
+    const screenshotCol = 5;
 
     this.worksheet.getRow(1).eachCell(cell => {
       cell.style = this.styles.header;
@@ -92,6 +97,36 @@ export default class JSONToExcelConverter {
       row.eachCell(cell => {
         cell.border = this.styles.cellBorder;
       });
+
+      if (testResult.screenshotPath && fs.existsSync(testResult.screenshotPath)) {
+        const imageId = this.workbook.addImage({
+          filename: testResult.screenshotPath,
+          extension: 'png',
+        });
+
+        const rowNumber = index + 2; // Row number in Excel
+        const colNumber = screenshotCol; // Screenshot column
+
+        // Clear the cell value (remove text path)
+        const screenshotCell = this.worksheet.getCell(rowNumber, colNumber);
+        screenshotCell.value = ''; // Remove any existing text
+
+        // Adjust column width and row height dynamically
+        this.worksheet.getColumn(colNumber).width = 35; // Adjust width to fit image
+        this.worksheet.getRow(rowNumber).height = 100; // Adjust height to fit image
+
+        // Insert image in the cell
+        this.worksheet.addImage(imageId, {
+          tl: { col: colNumber - 1, row: rowNumber - 1 }, // Top-left position (0-indexed)
+          ext: { width: 250, height: 140 }, // Image size in pixels
+        });
+      } else {
+        const screenshotCell = this.worksheet.getCell(index + 2, screenshotCol);
+        screenshotCell.value = 'No Screenshot';
+        screenshotCell.alignment = { horizontal: 'center', vertical: 'middle' };
+        screenshotCell.font = { italic: true, color: { argb: '808080' } };
+      }
+
       row.getCell(3).fill =
         testResult.status === 'FAILED' ? this.styles.failedFill : this.styles.passedFill;
     });
