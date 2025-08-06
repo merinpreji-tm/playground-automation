@@ -8,6 +8,7 @@ interface TestEntry {
   testName: string;
   status: 'PASSED' | 'FAILED';
   error?: string;
+  screenshotPath?: string;
 }
 
 class JSONReporter implements Reporter {
@@ -28,17 +29,18 @@ class JSONReporter implements Reporter {
     }
   }
 
-  onTestEnd(test: TestCase, result: TestResult): void {
+  onTestEnd(test: TestCase, result: TestResult) {
     const filePath = test.location.file;
     const suiteName = this.getFullSuiteName(test.parent);
     const testName = test.title;
     const status = result.status === 'passed' ? 'PASSED' : 'FAILED';
     const error = result.error ? this.sanitizeErrorMessage(result.error.message || '') : undefined;
+    const screenshotPath = this.getScreenshotPath(result);
     const timestamp = new Date().toISOString().replace(/:/g, '-');
     const fileName = `test-report-${timestamp}.json`;
     const outputFile = path.join(this.outputDir, fileName);
 
-    this.testResults.push({ timestamp, suiteName, testName, status, error });
+    this.testResults.push({ timestamp, suiteName, testName, status, error, screenshotPath });
 
     // Track number of completed tests for this spec file
     const completed = (this.specTestDoneCount.get(filePath) || 0) + 1;
@@ -77,6 +79,35 @@ class JSONReporter implements Reporter {
       fs.mkdirSync(dirPath, { recursive: true });
     }
   }
+  // private async getScreenshotPath(testTitle: string, filePath: string) {
+  //   try {
+  //     const fileName = path.basename(filePath).split('.')[0];
+  //     const folderPath = `testArtifacts/allure-results-${fileName}`;
+  //     const files = fs.readdirSync(folderPath);
+  //     for (const file of files) {
+  //       if (file.endsWith('.json')) {
+  //         const filePath = path.join(folderPath, file);
+  //         const jsonContent = await fs.promises.readFile(filePath, 'utf8');
+  //         const testData = JSON.parse(jsonContent);
+  //         if (testData.name && testData.name === testTitle) {
+  //           console.log(`Found screenshot for: ${testTitle}`);
+  //           const screenshotAttachment = testData.attachments?.find((att: any) => att.type === 'image/png');
+  //           if (screenshotAttachment) {
+  //             console.log(screenshotAttachment.source);
+  //             return path.resolve(folderPath, screenshotAttachment.source);
+  //           }
+  //         }
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Error finding screenshot path:', error);
+  //   }
+  // }
+  private getScreenshotPath(result: TestResult): string | null {
+    const screenshotAttachment = result.attachments.find(att => att.name === 'screenshot' && att.path);
+    return screenshotAttachment?.path || null;
+  }
+
 }
 
 export default JSONReporter;
